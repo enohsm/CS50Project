@@ -16,9 +16,6 @@
                     <div class="navbar-header">
                         <a class="navbar-brand" href="/">Xahar</a>
                     </div>
-
-                    {% if logged_in %}
-
                     <ul class="nav navbar-nav">
                         <li><a href="/">Homepage</a></li>
                         <li class="dropdown">
@@ -42,6 +39,7 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+                        {% if logged_in %}
                         <li><p>Welcome, {{ username }}.</p></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -54,39 +52,11 @@
                                 </ul>
                         </li>
                         <li><a href="/logout">Logout</a></li>
-                    </ul>
-
-                    {% else %}
-                    
-                    <ul class="nav navbar-nav">
-                        <li><a href="/">Homepage</a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Green Card<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/greencard">About Green Card</a></li>
-                                <li><a href="/greencard/request">Green Card Request</a></li>
-                                <li><a href="/greencard/status">Green Card Request Status</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Visa<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/visa">About Visa</a></li>
-                                <li><a href="/visa/application">Visa Application Request</a></li>
-                                <li><a href="/visa/status">Visa Application Status</a></li>
-                                <li><a href="/visa/statistics">Visa Application Statistics</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
+                        {% else %}
                         <li><a href="/register">Register</a></li>
                         <li><a href="/login">Login</a></li>
+                        {% endif %}
                     </ul>
-
-                    {% endif %}
-                
                 </div>
             </nav>
         </header>
