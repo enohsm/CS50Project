@@ -32,39 +32,51 @@ def register():
 
         password = request.form.get("password")
         # Şifre girilmiş mi? Pattern doğru mu? Uzunluk yeterli mi?
-        if not password or :
-            flash("Password cannot be empty.")
+        if not password or not x.valid_password(password):
+            flash("Invalid password.")
             return redirect("/register")
 
+        # Onay girilmiş mi? Şifre ile eşleşiyor mu?
         confirmation = request.form.get("confirmation")
-        if not confirmation:
-            flash("Password confirmation cannot be empty.")
+        if not confirmation or not x.match_passwords(password, confirmation):
+            flash("Passwords do not match.")
             return redirect("/register")
         
+        # İsim girilmiş mi? Harf dışında karakter içeriyor mu?
         name = request.form.get("name")
         surname = request.form.get("surname")
-        if not name or not surname:
-            flash("Name/Surname cannot be empty.")
+        if not name or not surname or not x.valid_namesurname(name, surname):
+            flash("Invalid name/surname.")
             return redirect("/register")
         
-        if not name.isalpha() or not surname.isalpha():
-            flash("Only letters can be used for first name and last name")
-            return redirect("/register")
-        
+        # Doğum tarihini formatı doğru mu?
         birth = request.form.get("birth")
-        if not valid_date(birth):
+        if not birth or not x.valid_date(birth):
             flash("Invalid birth date.")
-        
-
-        isexist = db.execute("SELECT username, password FROM users WHERE username = ?", username)
-        if isexist:
-            flash("This username already in use.")
             return redirect("/register")
 
-        if match_passwords(password, confirmation):
-            db.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(username,)",)
-            flash("You have successfully registered.")
-            return redirect("/login")
+        # Kimlik numarası var mı? Rakamlardan mı oluşuyor? Uzunluğu doğru mu?
+        ident_no = request.form.get("ident_no")
+        if not ident_no or not x.valid_identification(ident_no):
+            flash("Invalid identification number.")
+            return redirect("/register")
+
+        # Mail var mı? Formatı doğru mu?
+        email = request.form.get("email")
+        if not email or not x.valid_email(email):
+            flash("Invalid email address.")
+            return redirect("/register")
+
+        # Telefon numarası var mı?
+        contact = request.form.get("contact")
+        if not contact or not x.valid_contact(contact):
+            flash("Invalid contact number.")
+            return redirect("/register")
+
+        # KAYIT
+        db.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(username,)",)
+        flash("You have successfully registered.")
+        return redirect("/login")
     else:
         return render_template("register.html")
 
