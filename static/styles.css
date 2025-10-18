@@ -1,19 +1,15 @@
-/* Size for brand */
-nav .navbar-brand
-{
-    font-size: xx-large;
+h1 {
+    text-align:center;
+    margin-top: 55px;
+    margin-bottom: 55px;
 }
 
-/* Colors for brand */
-nav .navbar-brand .blue
-{
-    color: #537fbe;
+footer {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 35px;
 }
-nav .navbar-brand .red
-{
-    color: #ea433b;
-}
-nav .navbar-brand .yellow
-{
-    color: #f5b82e;
+
+button.btn-info {
+    margin-top: 25px;
 }

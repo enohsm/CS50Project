@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="/register" method="post">
+    <h1>Register Now!</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="username">Username:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="username" name="username" autocomplete="off" placeholder="Username" type="text" minlength="5" maxlength="20" title="Title must be min 5 and max 20 characters." autofocus="on" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="password">Password:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="password" name="password" autocomplete="off" placeholder="Password" type="password" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.{8,}).*$" title="Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long." minlength="8" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="confirmation">Confirm Password:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="confirmation" name="confirmation" autocomplete="off" placeholder="Confirm Password" type="password" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.{8,}).*$" title="Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long." minlength="8" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="name">Name:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name" type="text" pattern="[A-Za-z]+" title="Only letters allowed." required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="surname">Surname:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="surname" name="surname" autocomplete="off" placeholder="Surname" type="text" pattern="[A-Za-z]+" title="Only letters allowed." required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="birth">Birth Date:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="birth" name="birth" autocomplete="off" placeholder="Birth Date" type="date" pattern="(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/(19[0-9]{2}|20[0-9]{2})" min="01/01/1900" title="Birth date must be earliest 01/01/1900." required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="ident_no">Identification Number:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="ident_no" name="ident_no" autocomplete="off" placeholder="Identification Number" type="text" pattern="[0-9]{11}" title="Identification number must be exactly 11 digits." required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="email">E-Mail:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="email" name="email" autocomplete="off" placeholder="E-Mail" type="email" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="contact">Contact Number:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="contact" name="contact" autocomplete="off" placeholder="Contact Number" type="tel" pattern="[0-9]{11}" title="Contact number must be exactly 11 digits." required>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Register</button>
+    </div>
+</form>
+{% endblock %}
