@@ -21,4 +21,32 @@ def valid_date(birth):
     
 def valid_password(password):
     pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.{8,}).*$"
-    return bool(match(pattern, password))
+    if not bool(match(pattern, password)):
+        return False
+    if not len(password) >= 8:
+        return False
+    return True
+
+def valid_namesurname(name, surname):
+    if name.isalpha() and surname.isalpha():
+        return True
+    else:
+        return False
+
+def valid_identification(ident_no):
+    if ident_no.isdigit() and len(ident_no) == 11:
+        return True
+    else:
+        return False
+    
+def valid_email(email):
+    if email:
+        return True
+    else:
+        return False
+    
+def valid_contact(contact):
+    if:
+        return True
+    else:
+        return False

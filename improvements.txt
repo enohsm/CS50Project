@@ -1,1 +1,4 @@
 Parola kontrolünü JavaScript ile yap daha iyi gözüksün.
+Pasaport tablosuna cinsiyet ekle.
+SQL Tablasına giriş yapmak, silmek için fonksiyonlar yaz.
+Readme dosyasına kayıt işlemindeki race conditionu anlat.
