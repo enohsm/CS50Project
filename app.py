@@ -26,3 +26,6 @@ app.register_blueprint(mainbp)
 app.register_blueprint(gcbp)
 app.register_blueprint(visabp)
 app.register_blueprint(profilebp)
+
+if __name__ == "__main__":
+    app.run(debug=True)
