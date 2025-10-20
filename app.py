@@ -6,6 +6,7 @@ from routes.profile_routes import profilebp
 
 
 app = Flask(__name__)
+app.secret_key = b"C_Szotu9soz_-01.,01Qsxn72hjsk_."
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.jinja_env.auto_reload = True

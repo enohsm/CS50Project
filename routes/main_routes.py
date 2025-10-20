@@ -5,10 +5,6 @@ from .imports import *
 # TR: "main" rotalarını modülleyecek bir değişken ata
 mainbp = Blueprint("main", __name__)
 
-# ENG: Assign variable to read the data from database
-# TR: Veritabanından okunan veriyi bir değişkene atıyorum
-db = SQL("sqlite:///database.db")
-
 # ENG: Some user operations are handled within the "main" routes.
 # TR: "main" rotaları kullanıcı işlemlerinin de bir kısmını kapsar.
 
@@ -17,17 +13,21 @@ def homepage():
     return render_template("homepage.html")
 
 
-@mainbp.route("/register")
+@mainbp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+
         # EN: Check the data received from the form
         # TR: Formdan gelen verileri kontrol et
 
         username = request.form.get("username")
         # EN:
         # TR: Kullanıcı adı girilmiş mi? 5 ile 20 karakter arasında mı?
-        if not username or not 5 < len(username) < 20:
+        if not username or not 5 <= len(username) <= 20:
             flash("Invalid username.")
+            return redirect("/register")
+        if x.isexisting("users", "username", username):
+            flash("Username is already taken.")
             return redirect("/register")
 
         password = request.form.get("password")
@@ -52,6 +52,7 @@ def register():
         # Doğum tarihini formatı doğru mu?
         birth = request.form.get("birth")
         if not birth or not x.valid_date(birth):
+            print(birth)
             flash("Invalid birth date.")
             return redirect("/register")
 
@@ -60,23 +61,35 @@ def register():
         if not ident_no or not x.valid_identification(ident_no):
             flash("Invalid identification number.")
             return redirect("/register")
-
+        if x.isexisting("users", "ident_no", ident_no):
+            flash("This identification number is already registered.")
+            return redirect("/register")
+        
         # Mail var mı? Formatı doğru mu?
         email = request.form.get("email")
         if not email or not x.valid_email(email):
             flash("Invalid email address.")
             return redirect("/register")
-
+        if x.isexisting("users", "email", email):
+            flash("This e-mail is already registered.")
+            return redirect("/register")
+        
         # Telefon numarası var mı?
         contact = request.form.get("contact")
         if not contact or not x.valid_contact(contact):
             flash("Invalid contact number.")
             return redirect("/register")
+        if x.isexisting("users", "contact", contact):
+            flash("This contact number is already registered.")
+            return redirect("/register")
 
         # KAYIT
-        db.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(username,)",)
-        flash("You have successfully registered.")
-        return redirect("/login")
+        try:
+            DataBase.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), name, surname, x.valid_date(birth), ident_no, email, contact)
+            flash("You have successfully registered.")
+            return redirect("/login")
+        except ValueError:
+            flash("An error occured, please try again.")
     else:
         return render_template("register.html")
 
@@ -98,14 +111,14 @@ def login():
         
         # EN: Check if the user exists in the database
         # TR: Kullanıcı veritabanında var mı kontrol et
-        user = db.execute("SELECT id, username, password FROM users WHERE username = ?", username)
+        user = DataBase.execute("SELECT id, username, password FROM users WHERE username = ?", username)
         if not user:
             flash("Invalid username.")
             return redirect("/login")
         
         # EN: 
         # TR: Şifre eşleşmesini kontrol et
-        if password != user[0]["password"]:
+        if not check_password_hash(user[0][password], password):
             flash("Invalid password.")
             return redirect("/login")
         
