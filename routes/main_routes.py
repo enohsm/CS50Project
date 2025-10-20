@@ -100,33 +100,24 @@ def login():
         # EN: Check the data received from the form
         # TR: Formdan gelen verileri kontrol et
         username = request.form.get("username")
-        if not username:
-            flash("Username cannot be empty.")
-            return redirect("/login")
-
         password = request.form.get("password")
-        if not password:
-            flash("Password cannot be empty.")
+        if not username or not password:
+            flash("Username/password cannot be empty.")
             return redirect("/login")
         
         # EN: Check if the user exists in the database
         # TR: Kullanıcı veritabanında var mı kontrol et
-        user = DataBase.execute("SELECT id, username, password FROM users WHERE username = ?", username)
-        if not user:
-            flash("Invalid username.")
-            return redirect("/login")
-        
-        # EN: 
-        # TR: Şifre eşleşmesini kontrol et
-        if not check_password_hash(user[0][password], password):
-            flash("Invalid password.")
+        user = DataBase.execute("SELECT id, username, password, name FROM users WHERE username = ?", username)
+        if not user or not check_password_hash(user[0]["password"], password):
+            flash("Invalid username/password.")
             return redirect("/login")
         
         # EN: If login is successful, save the user information to the session
         # TR: Giriş başarılıysa bilgileri session'a kaydet
         session["user_id"] = user[0]["id"]
         session["username"] = user[0]["username"]
-
+        session["name"] = user[0]["name"]
+        print(session["name"])
         return redirect("/")
         
     else:
@@ -135,4 +126,5 @@ def login():
 
 @mainbp.route("/logout")
 def logout():
-    return "TODO"
+    session.clear()
+    return redirect("/")

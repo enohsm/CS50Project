@@ -4,8 +4,7 @@ from re import match
 # EN: 
 # TR: Programımda kullandığım kendi fonksiyonlarım
 
-# EN:
-# TR: Parola eşleşmesi
+
 def match_passwords(password, confirmation):
     if password == confirmation:
         return True
@@ -38,7 +37,7 @@ def valid_identification(ident_no):
         return False
     
 def valid_email(email):
-    pattern = r"^[a-z0-9]+[-_\.]?[a-z0-9]+@[a-z0-9]+[a-z\.]*\.[a-z]{2,}$"
+    pattern = r"^[a-z0-9]+([._-][a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$"
     if match(pattern, email):
         return True
     else:

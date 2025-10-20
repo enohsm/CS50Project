@@ -17,7 +17,8 @@ app.jinja_env.auto_reload = True
 def logged_in():
     return dict(
         logged_in = ("user_id" in session),
-        username = session.get("username", "Guest")
+        username = session.get("username", "Guest"),
+        name = session.get("name")
         )
 
 
