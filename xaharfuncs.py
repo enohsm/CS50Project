@@ -4,7 +4,6 @@ from re import match
 # EN: 
 # TR: Programımda kullandığım kendi fonksiyonlarım
 
-
 def match_passwords(password, confirmation):
     if password == confirmation:
         return True
