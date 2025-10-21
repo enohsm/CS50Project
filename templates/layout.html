@@ -32,7 +32,7 @@
                                 Visa<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/visa">About Visa</a></li>
-                                <li><a href="/visa/application">Visa Application Request</a></li>
+                                <li><a href="/visa/request">Visa Application Request</a></li>
                                 <li><a href="/visa/status">Visa Application Status</a></li>
                                 <li><a href="/visa/statistics">Visa Application Statistics</a></li>
                             </ul>
@@ -44,10 +44,33 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 {{ name }} <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
+                                    {% if role == "user" %}
+                                    <li><a href="/user_dashboard">User Dashboard</a></li>
                                     <li><a href="/me">Profile</a></li>
                                     <li><a href="/me/vehicles">My Vehicles</a></li>
                                     <li><a href="/me/passports">My Passports</a></li>
                                     <li><a href="/me/requests">My Green Card/Visa Requests</a></li>
+                                    {% elif role == "employee" %}
+                                    <li><a href="/user_dashboard">User Dashboard</a></li>
+                                    <li><a href="/employee_dashboard">Employee Dashboard</a></li>
+                                    <li><a href="/me">Profile</a></li>
+                                    <li><a href="/me/vehicles">My Vehicles</a></li>
+                                    <li><a href="/me/passports">My Passports</a></li>
+                                    <li><a href="/me/requests">My Green Card/Visa Requests</a></li>
+                                    <li><a href="#">Green Card Application</a></li>
+                                    <li><a href="#">Green Card Requests</a></li>
+                                    <li><a href="#">Visa Requests</a></li>
+                                    {% elif role == "admin" %}
+                                    <li><a href="/user_dashboard">User Dashboard</a></li>
+                                    <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                                    <li><a href="/me">Profile</a></li>
+                                    <li><a href="/me/vehicles">My Vehicles</a></li>
+                                    <li><a href="/me/passports">My Passports</a></li>
+                                    <li><a href="/me/requests">My Green Card/Visa Requests</a></li>
+                                    <li><a href="#">Green Card Application</a></li>
+                                    <li><a href="#">Green Card Requests</a></li>
+                                    <li><a href="#">Visa Requests</a></li>
+                                    {% endif %}
                                 </ul>
                         </li>
                         <li><a href="/logout">Logout</a></li>

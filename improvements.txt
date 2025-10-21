@@ -4,6 +4,8 @@ SQL Tablasına giriş yapmak, silmek için fonksiyonlar yaz.
 Readme dosyasına kayıt işlemindeki race conditionu anlat.
 Kayıt oluşturulurken, isim soyismin baş harfleri büyük olsun (pythonda ayarla)
 Pasaport kaydederken isim soyisim büyük harflerle olacak.
+Çalışanların yaptığı işlemleri tut.
+Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrolünü databaseden sorguyla kontrol ettiğini anlat.
 
 
 Sıradaki: Login fonksiyonunu ve html yapısını yap.

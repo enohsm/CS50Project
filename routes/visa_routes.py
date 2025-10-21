@@ -11,16 +11,25 @@ def aboutvisa():
     return render_template("visa.html")
 
 
-@visabp.route("/application")
+@visabp.route("/request")
+@x.login_required
 def visaapp():
-    return render_template("visa_application.html")
+    return render_template("visa_.html")
 
 
 @visabp.route("/status")
+@x.login_required
 def visastatus():
     return render_template("visa_app_status.html")
 
 
 @visabp.route("/statistics")
+@x.login_required
 def visastatistics():
     return render_template("visa_app_statistics.html")
+
+
+@visabp.route("/application")
+@x.login_required("employee")
+def visa_application():
+    return render_template("visa_application.html")

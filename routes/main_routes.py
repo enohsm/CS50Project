@@ -16,6 +16,9 @@ def homepage():
 @mainbp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        if "user_id" in session:
+            flash("You are already logged in.")
+            return redirect("/")
 
         # EN: Check the data received from the form
         # TR: Formdan gelen verileri kontrol et
@@ -86,17 +89,25 @@ def register():
         # KAYIT
         try:
             DataBase.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), name, surname, x.valid_date(birth), ident_no, email, contact)
+            DataBase.execute("INSERT INTO roles (user_id) VALUES((SELECT id FROM users WHERE username = ?))", username)
             flash("You have successfully registered.")
             return redirect("/login")
         except ValueError:
             flash("An error occured, please try again.")
     else:
+        if "user_id" in session:
+            flash("You are already logged in.")
+            return redirect("/")
         return render_template("register.html")
 
 
 @mainbp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        if "user_id" in session:
+            flash("You are already logged in.")
+            return redirect("/")
+        
         # EN: Check the data received from the form
         # TR: Formdan gelen verileri kontrol et
         username = request.form.get("username")
@@ -107,7 +118,7 @@ def login():
         
         # EN: Check if the user exists in the database
         # TR: Kullanıcı veritabanında var mı kontrol et
-        user = DataBase.execute("SELECT id, username, password, name FROM users WHERE username = ?", username)
+        user = DataBase.execute("SELECT users.id, users.username, users.password, users.name, roles.role FROM users JOIN roles ON users.id = roles.user_id WHERE username = ?", username)
         if not user or not check_password_hash(user[0]["password"], password):
             flash("Invalid username/password.")
             return redirect("/login")
@@ -117,14 +128,27 @@ def login():
         session["user_id"] = user[0]["id"]
         session["username"] = user[0]["username"]
         session["name"] = user[0]["name"]
-        print(session["name"])
+        session["role"] = user[0]["role"]
+        if session["role"] == "admin":
+            return redirect("/admin_dashboard")
+        elif session["role"] == "employee":
+            return redirect("/employee_dashboard")
         return redirect("/")
         
     else:
+        if "user_id" in session:
+            flash("You are already logged in.")
+            return redirect("/")
         return render_template("login.html")
 
 
 @mainbp.route("/logout")
 def logout():
-    session.clear()
-    return redirect("/")
+    if not "user_id" in session:
+        flash("You are already logged out.")
+        return redirect("/")
+    
+    else:
+        session.clear()
+        flash("You have successfully logged out.")
+        return redirect("/")
