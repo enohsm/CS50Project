@@ -14,7 +14,7 @@ def aboutvisa():
 @visabp.route("/request")
 @x.login_required
 def visaapp():
-    return render_template("visa_.html")
+    return render_template("visa_request.html")
 
 
 @visabp.route("/status")
