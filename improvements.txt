@@ -6,6 +6,7 @@ Kayıt oluşturulurken, isim soyismin baş harfleri büyük olsun (pythonda ayar
 Pasaport kaydederken isim soyisim büyük harflerle olacak.
 Çalışanların yaptığı işlemleri tut.
 Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrolünü databaseden sorguyla kontrol ettiğini anlat.
+Role sistemini ve login required fonksiyonunu güncelle.
 
 
 Sıradaki: Login fonksiyonunu ve html yapısını yap.

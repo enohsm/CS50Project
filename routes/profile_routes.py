@@ -23,6 +23,12 @@ def vehicles():
 def passports():
     return render_template("my_passports.html")
 
+# Evraklar routeunu ayarla
+@profilebp.route("/documents")
+@x.login_required
+def documents():
+    return render_template("my_documents.html")
+
 # Visa requests routeunu ayarla
 @profilebp.route("/requests")
 @x.login_required

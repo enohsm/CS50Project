@@ -88,7 +88,7 @@ def register():
 
         # KAYIT
         try:
-            DataBase.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), name, surname, x.valid_date(birth), ident_no, email, contact)
+            DataBase.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), name.capitalize(), surname.capitalize(), x.valid_date(birth), ident_no, email, contact)
             DataBase.execute("INSERT INTO roles (user_id) VALUES((SELECT id FROM users WHERE username = ?))", username)
             flash("You have successfully registered.")
             return redirect("/login")
@@ -129,11 +129,7 @@ def login():
         session["username"] = user[0]["username"]
         session["name"] = user[0]["name"]
         session["role"] = user[0]["role"]
-        if session["role"] == "admin":
-            return redirect("/admin_dashboard")
-        elif session["role"] == "employee":
-            return redirect("/employee_dashboard")
-        return redirect("/")
+        return redirect(f"/dashboard/{session["role"]}")
         
     else:
         if "user_id" in session:
