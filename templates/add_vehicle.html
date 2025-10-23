@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Add Vehicle
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="/add_vehicle" method="post">
+    <h1>Add Vehicle</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="name">Name & Surname:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name & Surname" type="text" autofocus required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="address">Address:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="address" name="address" autocomplete="off" placeholder="Address" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="province">Province/District</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="province" name="province" required>
+            </select>
+            <select class="form-control" id="district" name="district" required>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="plate">Plate:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="plate" name="plate" autocomplete="off" placeholder="Plate" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="vin">VIN:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="vin" name="vin" autocomplete="off" placeholder="VIN" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="brand">Brand:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="brand" name="brand" autocomplete="off" placeholder="Brand" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="type">Type:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="type" name="type" autocomplete="off" placeholder="Type" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="color">Color:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="color" name="color" autocomplete="off" placeholder="Color" type="text" required>
+        </div>
+    </div>
+</form>
+{% endblock %}

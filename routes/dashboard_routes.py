@@ -20,3 +20,15 @@ def employee_dashboard():
 @x.login_required("admin")
 def admin_dashboard():
     return render_template("admin_dashboard.html")
+
+
+@dashboardbp.route("/vehicles")
+@x.login_required
+def vehicles():
+    return render_template("my_vehicles.html")
+
+
+@dashboardbp.route("/add_vehicle")
+@x.login_required
+def add_vehicle():
+    return render_template("add_vehicle.html")
