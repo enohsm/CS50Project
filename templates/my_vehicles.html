@@ -5,5 +5,47 @@
 {% endblock %}
 
 {% block main %}
-
+<h1>Vehicles</h1>
+    <div class="text-center" style="margin-bottom: 15px">
+        <a class="btn btn-success" href="/dashboard/add_vehicle">New Vehicle</a>
+    </div>    
+    </div>
+<table class="table">
+    <tr>
+        <th>Name & Surname</th>
+        <th>Address</th>
+        <th>Plate</th>
+        <th>VIN</th>
+        <th>Brand</th>
+        <th>Type</th>
+        <th>Color</th>
+        <th class="text-center">Modify</th>
+        <th class="text-center">Delete</th>
+    </tr>
+    {% if vehicles %}
+    {% for vehicle in vehicles %}
+    <tr>
+        <td>{{ vehicle.namesurname }}</td>
+        <td>{{ vehicle.address }}</td>
+        <td>{{ vehicle.plate }}</td>
+        <td>{{ vehicle.vin }}</td>
+        <td>{{ vehicle.brand }}</td>
+        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.color }}</td>
+        <td class="text-center"><a href="/dashboard/modify_vehicle/{{ vehicle.id }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a></td>
+        <td class="text-center"><a href="/dashboard/delete_vehicle/{{ vehicle.id }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+    </tr>
+    {% endif %}
+</table>
 {% endblock %}

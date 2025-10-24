@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" action="/add_vehicle" method="post">
+<form class="form-horizontal" action="/dashboard/add_vehicle" method="post">
     <h1>Add Vehicle</h1>
     <div class="form-group">
         <label class="control-label col-sm-5" for="name">Name & Surname:</label>
@@ -18,17 +18,18 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-sm-5" for="address">Address:</label>
+        <label class="control-label col-sm-5" for="province">Province:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="address" name="address" autocomplete="off" placeholder="Address" type="text" required>
+            <select class="form-control" id="province" name="province" required>
+                <option selected disabled value="">Province</option>
+            </select>
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-sm-5" for="province">Province/District</label>
+        <label class="control-label col-sm-5">District:</label>
         <div class="col-sm-2">
-            <select class="form-control" id="province" name="province" required>
-            </select>
             <select class="form-control" id="district" name="district" required>
+                <option selected disabled value="">District</option>
             </select>
         </div>
     </div>
@@ -61,6 +62,9 @@
         <div class="col-sm-2">
             <input class="form-control" id="color" name="color" autocomplete="off" placeholder="Color" type="text" required>
         </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Add Vehicle</button>
     </div>
 </form>
 {% endblock %}

@@ -15,7 +15,9 @@ def profile():
 @profilebp.route("/vehicles")
 @x.login_required
 def vehicles():
-    return render_template("my_vehicles.html")
+    vehicles = DataBase.execute("SELECT * FROM vehicles WHERE user_id = ?", session["user_id"])
+    return render_template("my_vehicles.html", vehicles=vehicles)
+
 
 # Pasaportlar routeunu ayarla
 @profilebp.route("/passports")
