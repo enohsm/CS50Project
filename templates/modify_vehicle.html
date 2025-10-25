@@ -1,27 +1,23 @@
 {% extends "layout.html" %}
 
-{% block javascript %}
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-{% endblock %}
-
 {% block title %}
-    Add Vehicle
+    Modify Vehicle
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" action="/me/vehicle/add" method="post">
+<form class="form-horizontal" action="/me/vehicle/modify" method="post">
     <h1>Add Vehicle</h1>
     <div class="form-group">
         <label class="control-label col-sm-5" for="name">Name & Surname:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name & Surname" type="text" autofocus required>
+            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name & Surname" type="text" autofocus value="{{ vehicle.namesurname }}" required>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="province">Province:</label>
         <div class="col-sm-2">
             <select class="form-control" id="province" name="province" required>
-                <option selected disabled value="">Province</option>
+                <option selected disabled value="{{ vehicle.province }}" >{{ vehicle.province }}</option>
             </select>
         </div>
     </div>
@@ -29,42 +25,42 @@
         <label class="control-label col-sm-5">District:</label>
         <div class="col-sm-2">
             <select class="form-control" id="district" name="district" required>
-                <option selected disabled value="">District</option>
+                <option selected disabled value="{{ vehicle.district }}">{{ vehicle.district }}</option>
             </select>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="plate">Plate:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="plate" name="plate" autocomplete="off" placeholder="Plate" type="text" required>
+            <input class="form-control" id="plate" name="plate" autocomplete="off" placeholder="Plate" type="text" value="{{ vehicle.plate }}" required>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="vin">VIN:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="vin" name="vin" autocomplete="off" placeholder="VIN" type="text" required>
+            <input class="form-control" id="vin" name="vin" autocomplete="off" placeholder="VIN" type="text" value="{{ vehicle.vin }}" required>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="brand">Brand:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="brand" name="brand" autocomplete="off" placeholder="Brand" type="text" required>
+            <input class="form-control" id="brand" name="brand" autocomplete="off" placeholder="Brand" type="text" value="{{ vehicle.brand }}" required>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="type">Type:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="type" name="type" autocomplete="off" placeholder="Type" type="text" required>
+            <input class="form-control" id="type" name="type" autocomplete="off" placeholder="Type" type="text" value="{{ vehicle.model }}" required>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="color">Color:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="color" name="color" autocomplete="off" placeholder="Color" type="text" required>
+            <input class="form-control" id="color" name="color" autocomplete="off" placeholder="Color" type="text" value="{{ vehicle.color }}" required>
         </div>
     </div>
     <div class="form-group text-center">
-        <button class="btn btn-info btn-lg" type="submit">Add Vehicle</button>
+        <button class="btn btn-info btn-lg" type="submit">Modify Vehicle</button>
     </div>
 </form>
 {% endblock %}

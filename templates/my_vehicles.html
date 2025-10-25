@@ -7,7 +7,7 @@
 {% block main %}
 <h1>Vehicles</h1>
     <div class="text-center" style="margin-bottom: 15px">
-        <a class="btn btn-success" href="/dashboard/add_vehicle">New Vehicle</a>
+        <a class="btn btn-success" href="/me/vehicles/add">New Vehicle</a>
     </div>    
     </div>
 <table class="table">
@@ -32,8 +32,8 @@
         <td>{{ vehicle.brand }}</td>
         <td>{{ vehicle.model }}</td>
         <td>{{ vehicle.color }}</td>
-        <td class="text-center"><a href="/dashboard/modify_vehicle/{{ vehicle.id }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a></td>
-        <td class="text-center"><a href="/dashboard/delete_vehicle/{{ vehicle.id }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
+        <td class="text-center"><a href="/me/vehicles/modify?id={{ vehicle.id }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a></td>
+        <td class="text-center"><a href="/me/vehicles/delete?id={{ vehicle.id }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
     </tr>
     {% endfor %}
     {% else %}
