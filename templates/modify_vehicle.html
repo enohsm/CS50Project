@@ -5,28 +5,12 @@
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" action="/me/vehicle/modify" method="post">
-    <h1>Add Vehicle</h1>
+<form class="form-horizontal" action="/me/vehicle/modify?id={{ vehicle.id }}" method="post">
+    <h1>Modify Vehicle</h1>
     <div class="form-group">
         <label class="control-label col-sm-5" for="name">Name & Surname:</label>
         <div class="col-sm-2">
             <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name & Surname" type="text" autofocus value="{{ vehicle.namesurname }}" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-sm-5" for="province">Province:</label>
-        <div class="col-sm-2">
-            <select class="form-control" id="province" name="province" required>
-                <option selected disabled value="{{ vehicle.province }}" >{{ vehicle.province }}</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-sm-5">District:</label>
-        <div class="col-sm-2">
-            <select class="form-control" id="district" name="district" required>
-                <option selected disabled value="{{ vehicle.district }}">{{ vehicle.district }}</option>
-            </select>
         </div>
     </div>
     <div class="form-group">

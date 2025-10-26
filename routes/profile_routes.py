@@ -82,7 +82,7 @@ def add_vehicle():
             flash("Invalid color.")
             return (url_for("dashboard.add_vehicle"))
         
-        vehicles = DataBase.execute("SELECT plate FROM vehicles WHERE user_id = ? AND plate = ?", session["user_id"], plate)
+        vehicles = DataBase.execute("SELECT id FROM vehicles WHERE user_id = ? AND plate = ?", session["user_id"], plate)
         if vehicles:
             flash("This vehicle is already in your vehicle list.")
             return (url_for("dashboard.add_vehicle"))
@@ -98,18 +98,23 @@ def add_vehicle():
 @x.login_required
 def modify_vehicle():
     if request.method == "POST":
-        pass
-    else:
-        id = request.args.get("id")
-        vehicle = DataBase.execute("SELECT * FROM vehicles WHERE id = ? AND user_id = ?", id, session["user_id"])
-        if not vehicle:
+        vehicle_id = request.args.get("id")
+        vehicle = DataBase.execute("SELECT * FROM vehicles WHERE id = ? AND user_id = ?", vehicle_id, session["user_id"])
+        if len(vehicle) != 1:
             flash("Unauthorized access.")
             return redirect(url_for("profile.vehicles"))
-        print(vehicle)
-        return render_template("modify_vehicle.html", vehicle=vehicle)
         
-
-    return render_template("modify_vehicle.html")
+        name
+        
+        DataBase.execute("UPDATE vehicles ")
+        
+    else:
+        vehicle_id = request.args.get("id")
+        vehicle = DataBase.execute("SELECT * FROM vehicles WHERE id = ? AND user_id = ?", vehicle_id, session["user_id"])
+        if len(vehicle) != 1:
+            flash("Unauthorized access.")
+            return redirect(url_for("profile.vehicles"))
+        return render_template("modify_vehicle.html", vehicle=vehicle[0])
 
 
 @profilebp.route("/vehicles/delete")
