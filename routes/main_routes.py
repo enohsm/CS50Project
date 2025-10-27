@@ -55,7 +55,6 @@ def register():
         # Doğum tarihini formatı doğru mu?
         birth = request.form.get("birth")
         if not birth or not x.valid_date(birth):
-            print(birth)
             flash("Invalid birth date.")
             return redirect("/register")
 

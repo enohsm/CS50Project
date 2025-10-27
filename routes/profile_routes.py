@@ -25,7 +25,8 @@ def vehicles():
 @profilebp.route("/passports")
 @x.login_required
 def passports():
-    return render_template("my_passports.html")
+    passports = DataBase.execute("SELECT * FROM vehicles WHERE user_id = ?", session["user_id"])
+    return render_template("my_passports.html", passports=passports)
 
 
 # Evraklar routeunu ayarla
@@ -49,43 +50,43 @@ def add_vehicle():
         name = request.form.get("name")
         if not name or not x.valid_name(name):
             flash("Invalid name")
-            return redirect(url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         province = request.form.get("province")
         district = request.form.get("district")
         if not province or not district or not x.valid_location(province, district):
             flash("Invalid location.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         plate = request.form.get("plate")
         if not plate or not x.valid_plate(plate):
             flash("Invalid plate.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         vin = request.form.get("vin")
         if not vin or not x.valid_vin(vin):
             flash("Invalid VIN.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         brand = request.form.get("brand")
         if not brand or not x.valid_brand(brand):
             flash("Invalid brand.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         type = request.form.get("type")
         if not type or not x.valid_type(type):
             flash("Invalid type.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         color = request.form.get("color")
         if not color or not x.valid_color(color):
             flash("Invalid color.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
-        vehicles = DataBase.execute("SELECT id FROM vehicles WHERE user_id = ? AND plate = ?", session["user_id"], plate)
-        if vehicles:
+        vehicle = DataBase.execute("SELECT id FROM vehicles WHERE user_id = ? AND plate = ? OR vin = ?", session["user_id"], plate, vin)
+        if vehicle:
             flash("This vehicle is already in your vehicle list.")
-            return (url_for("dashboard.add_vehicle"))
+            return redirect(url_for("profile.add_vehicle"))
         
         DataBase.execute("INSERT INTO vehicles (user_id, namesurname, address, plate, vin, brand, model, color) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], name.upper(), (district.upper()+"/"+province.upper()), plate.upper(), vin.upper(), brand.upper(), type.upper(), color.upper())
         flash("Your vehicle has successfully registered.")
@@ -99,17 +100,53 @@ def add_vehicle():
 def modify_vehicle():
     if request.method == "POST":
         vehicle_id = request.args.get("id")
+        if not vehicle_id:
+            return redirect(url_for("profile.vehicles"))
+
         vehicle = DataBase.execute("SELECT * FROM vehicles WHERE id = ? AND user_id = ?", vehicle_id, session["user_id"])
         if len(vehicle) != 1:
             flash("Unauthorized access.")
             return redirect(url_for("profile.vehicles"))
         
-        name
+        name = request.form.get("name")
+        if not name or not x.valid_name(name):
+            flash("Invalid name. Form refreshed.")
+            return redirect(url_for("profile.modify_vehicle", id = vehicle_id))
         
-        DataBase.execute("UPDATE vehicles ")
+        plate = request.form.get("plate")
+        if not plate or not x.valid_plate(plate):
+            flash("Invalid plate. Form refreshed.")
+            return redirect(url_for("profile.modify_vehicle", id = vehicle_id))
+
+        vin = request.form.get("vin")
+        if not vin or not x.valid_vin(vin):
+            flash("Invalid VIN. Form refreshed.")
+            return redirect(url_for("profile.modify_vehicle", id = vehicle_id))
+
+        brand = request.form.get("brand")
+        if not brand or not x.valid_brand(brand):
+            flash("Invalid brand. Form refreshed.")
+            return redirect(url_for("profile.modify_vehicle", id = vehicle_id))
+
+        type_ = request.form.get("type")
+        if not type_ or not x.valid_type(type_):
+            flash("Invalid type. Form refreshed.")
+            return redirect(url_for("profile.modify_vehicle", id = vehicle_id))
+
+        color = request.form.get("color")
+        if not color or not x.valid_color(color):
+            flash("Invalid color. Form refreshed.")
+            return redirect(url_for("profile.modify_vehicle", id = vehicle_id))
+
+        DataBase.execute("UPDATE vehicles SET namesurname = ?, plate = ?, vin = ?, brand = ?, model = ?, color = ? WHERE id = ?", name, plate, vin, brand, type_, color, vehicle_id)
+        flash("Your vehicle have successfully modified.")
+        return redirect(url_for("profile.vehicles"))
         
     else:
         vehicle_id = request.args.get("id")
+        if not vehicle_id:
+            return redirect(url_for("profile.vehicles"))
+
         vehicle = DataBase.execute("SELECT * FROM vehicles WHERE id = ? AND user_id = ?", vehicle_id, session["user_id"])
         if len(vehicle) != 1:
             flash("Unauthorized access.")
@@ -120,13 +157,71 @@ def modify_vehicle():
 @profilebp.route("/vehicles/delete")
 @x.login_required
 def delete_vehicle():
+    vehicle_id = request.args.get("id")
+    if not vehicle_id:
+        return redirect(url_for("profile.vehicles"))
+    
+    vehicle = DataBase.execute("SELECT * FROM vehicles WHERE id = ? AND user_id = ?", vehicle_id, session["user_id"])
+    if len(vehicle) != 1:
+        flash("Unauthorized access.")
+        return redirect(url_for("profile.vehicles"))
+
+    DataBase.execute("DELETE FROM vehicles WHERE id = ?", vehicle_id)
+    flash(f"You have successfully deleted the vehicle with plate {vehicle[0]["plate"]}")
     return redirect(url_for("profile.vehicles"))
     
 
-@profilebp.route("/passports/add")
+@profilebp.route("/passports/add", methods=["GET", "POST"])
 @x.login_required
 def add_passport():
-    return render_template("add_passport.html")
+    if request.method == "POST":
+        name = request.form.get("name")
+        surname = request.form.get("surname")
+        if not name or not surname or not x.valid_name((name + " " + surname)):
+            flash("Invalid name/surname.")
+            return redirect(url_for("profile.add_passport"))
+        
+        sex = request.form.get("sex")
+        if not sex or sex not in ["male", "female"]:
+            flash("Invalid sex.")
+            return redirect(url_for("profile.add_passport"))
+        
+        birth = request.form.get("birth")
+        if not birth or not x.valid_date(birth):
+            flash("Invalid birth date.")
+            return redirect(url_for("profile.add_passport"))
+        
+        pass_no = request.form.get("pass_no")
+        if not pass_no or not x.valid_passno(pass_no):
+            flash("Invalid passport number.")
+            return redirect(url_for("profile.add_passport"))
+        
+        pass_exp = request.form.get("pass_exp")
+        if not pass_exp or not x.valid_date(pass_exp):
+            flash("Invalid date of expiry.")
+            return redirect(url_for("profile.add_passport"))
+        
+        ident_no = request.form.get("ident_no")
+        if not ident_no or not ident_no.isdigit() or len(ident_no) != 11:
+            flash("Invalid identification number.")
+            return redirect(url_for("profile.add_passport"))
+        
+        user_ident_no = DataBase.execute("SELECT ident_no FROM users WHERE id = ?", session["user_id"])[0]["ident_no"]
+        if user_ident_no != ident_no:
+            flash("You are not owner of this passport.")
+            return redirect(url_for("profile.add_passport"))
+        
+        passport = DataBase.execute("SELECT id FROM passports WHERE pass_no = ?", pass_no)
+        if passport:
+            flash("This passport already registered in system.")
+            return redirect(url_for("profile.add_passport"))
+        
+        DataBase.execute("INSERT INTO passports (user_id, name, surname, sex, birth, pass_no, pass_exp, ident_no) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no)
+        flash("Your passport successfully registered.")
+        return redirect(url_for("profile.passports"))
+
+    else:
+        return render_template("add_passport.html")
 
 
 @profilebp.route("/passports/modify")

@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Passport
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="{{ url_for('profile.add_passport') }}" method="post">
+    <h1>Add Passport</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="name">Name:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name" type="text" autofocus required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="surname">Surname:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="surname" name="surname" autocomplete="off" placeholder="Surname" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="sex">Sex:</label>
+        <div class="col-sm-1">
+            <select class="form-control" id="sex" name="sex" required>
+                <option selected disabled>Sex</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="birth">Birth Date:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="birth" name="birth" placeholder="Birth Date" autocomplete="off" type="date" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_no">Passport No:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="pass_no" name="pass_no" placeholder="Passport No" autocomplete="off" type="text" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_exp">Date of Expiry:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="pass_exp" name="pass_exp" placeholder="Date of Expiry" autocomplete="off" type="date" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="ident_no">Identification No:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="ident_no" name="ident_no" placeholder="Identification Number" autocomplete="off" type="text" required>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Add Passport</button>
+    </div>
+</form>
+{% endblock %}

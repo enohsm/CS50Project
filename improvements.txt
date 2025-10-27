@@ -9,4 +9,4 @@ Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrol
 Role sistemini ve login required fonksiyonunu güncelle.
 
 
-Sıradaki: Login fonksiyonunu ve html yapısını yap.
+Sıradaki: my_passports.html ayarla. Sonrasında modify_passport.html ayarla ve delete_passport route'unu ayarla.

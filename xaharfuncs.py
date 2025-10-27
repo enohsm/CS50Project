@@ -113,6 +113,8 @@ def valid_location(province, district):
         return False
     
     data = response.json().get("data", [])
+    if not data:
+        return False
 
     provinces = [p["name"] for p in data]
     if province not in provinces:
@@ -138,18 +140,24 @@ def valid_vin(vin):
 
 
 def valid_brand(brand):
-    pattern = r"^[A-Za-z -\.]+$"
+    pattern = r"^[A-Za-z -.]+$"
 
     return bool(match(pattern, brand))
 
 
-def valid_type(type):
-    pattern = r"^[A-Za-z0-9\,\. -]+$"
+def valid_type(type_):
+    pattern = r"^[A-Za-z0-9,.\- ]+$"
 
-    return bool(match(pattern, type))
+    return bool(match(pattern, type_))
 
 
 def valid_color(color):
     pattern = r"^[A-Za-z\(\) ]+$"
 
     return bool(match(pattern, color))
+
+
+def valid_passno(pass_no):
+    pattern = r"^[A-Za-z]{1}[0-9]{8}$"
+
+    return bool(match(pattern, pass_no))

@@ -19,8 +19,10 @@
         <th>Brand</th>
         <th>Type</th>
         <th>Color</th>
+        {% if vehicles %}
         <th class="text-center">Modify</th>
         <th class="text-center">Delete</th>
+        {% endif %}
     </tr>
     {% if vehicles %}
     {% for vehicle in vehicles %}

@@ -83,3 +83,23 @@ main {
     margin-left: 50px;
     padding: 15px;
 }
+
+.flashes-container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flashes li {
+    background: rgb(252, 240, 82);
+    padding: 15px;
+    border-radius: 25px;
+    border-left: 5px solid rgb(255, 191, 0);
+    box-shadow: 1px 4px rgb(177, 177, 177);
+}
