@@ -25,7 +25,7 @@ def vehicles():
 @profilebp.route("/passports")
 @x.login_required
 def passports():
-    passports = DataBase.execute("SELECT * FROM vehicles WHERE user_id = ?", session["user_id"])
+    passports = DataBase.execute("SELECT * FROM passports WHERE user_id = ?", session["user_id"])
     return render_template("my_passports.html", passports=passports)
 
 
@@ -224,13 +224,75 @@ def add_passport():
         return render_template("add_passport.html")
 
 
-@profilebp.route("/passports/modify")
+@profilebp.route("/passports/modify", methods = ["GET", "POST"])
 @x.login_required
 def modify_passport():
-    return render_template("modify_passport.html")
+    if request.method == "POST":
+        passport_id = request.args.get("id")
+        if not passport_id:
+            return redirect(url_for('profile.passports'))
+        
+        passport = DataBase.execute("SELECT * FROM passports WHERE user_id = ? AND id = ?", session["user_id"], passport_id)
+        if not passport:
+            flash("Unauthorized access.")
+            return redirect(url_for('profile.passports'))
+        
+        name = request.form.get("name")
+        surname = request.form.get("surname")
+        if not name or not x.valid_name(name + " " + surname):
+            return x.apology('Invalid name or surname. Form refreshed.', 'profile.modify_passport', id = passport_id)
+        
+        sex = request.form.get("sex")
+        if not sex or sex not in ["male", "female"]:
+            return x.apology('Invalid sex. Form refreshed', 'profile.modify_passport', id = passport_id)
+        
+        birth = request.form.get('birth')
+        if not birth or not x.valid_date(birth):
+            return x.apology('Invalid birth date. Form refreshed.', 'profile.modify_passport', id = passport_id)
+        
+        pass_no = request.form.get('pass_no')
+        if not pass_no or not x.valid_passno(pass_no):
+            return x.apology('Invalid passport number. Form refreshed.', 'profile.modify_passport', id = passport_id)
+
+        pass_exp = request.form.get('pass_exp')
+        if not pass_exp or not x.valid_date(pass_exp):
+            return x.apology('Invalid passport number. Form refreshed.', 'profile.modify_passport', id = passport_id)
+        
+        ident_no = request.form.get('ident_no')
+        if not ident_no or not ident_no.isdigit() or len(ident_no) != 11:
+            return x.apology('Invalid identification number. Form refreshed.', 'profile.modify_passport', id = passport_id)
+        
+        isexist = DataBase.execute('SELECT * FROM passports WHERE pass_no = ?', pass_no)
+        if isexist:
+            return x.apology('This passport is already registered in the system.', 'profile.modify_passport', id = passport_id)
+        
+        try:
+            DataBase.execute('UPDATE passports SET name = ?, surname = ?, sex = ?, birth = ?, pass_no = ?, pass_exp = ?, ident_no = ? WHERE user_id = ? AND id = ?', name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no, session['user_id'], passport_id)
+            return x.apology('Your passport have successfully registered.', 'profile.passports')
+
+        except ValueError:
+            return x.apology('Error, try again.', 'profile.modify_passport', id = passport_id)
+        
+    else:
+        passport_id = request.args.get("id")
+        if not passport_id:
+            return redirect(url_for('profile.passports'))
+
+        passport = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])
+        if len(passport) != 1:
+            return x.apology('Unauthorized access.', 'profile.vehicles')
+
+        return render_template("modify_passport.html", passport=passport[0])
 
 
 @profilebp.route("/passports/delete")
 @x.login_required
 def delete_passport():
-    return redirect(url_for("profile.passports"))
+    passport_id = request.args.get('id')
+    passport = DataBase.execute('SELECT id FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])[0]['id']
+    if not passport:
+        return x.apology('Unauthorized access.', 'profile.passports')
+    
+    DataBase.execute('DELETE FROM passports WHERE id = ? AND user_id = ?', passport, session['user_id'])
+
+    return x.apology('Your passport successfully deleted.', 'profile.passports')

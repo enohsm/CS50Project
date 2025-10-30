@@ -14,9 +14,9 @@ def match_passwords(password, confirmation):
         return False
     
 
-def valid_date(birth):
+def valid_date(date):
     try:
-        return datetime.strptime(birth, "%Y-%m-%d").strftime("%d/%m/%Y")
+        return datetime.strptime(date, "%Y-%m-%d").strftime("%d/%m/%Y")
     except ValueError:
         return False
     
@@ -161,3 +161,8 @@ def valid_passno(pass_no):
     pattern = r"^[A-Za-z]{1}[0-9]{8}$"
 
     return bool(match(pattern, pass_no))
+
+
+def apology(message, route, **values):
+    flash(message)
+    return redirect(url_for(route, **values))

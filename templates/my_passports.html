@@ -5,5 +5,45 @@
 {% endblock %}
 
 {% block main %}
-    <h1></h1>
+    <h1>My Passports</h1>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Sex</th>
+            <th>Birth Date</th>
+            <th>Passport No</th>
+            <th>Date of Expiry</th>
+            <th>Identification No</th>
+            {% if passports %}
+            <th class="text-center">Modify</th>
+            <th class="text-center">Delete</th>
+            {% endif %}
+        </tr>
+        {% if passports %}
+        {% for passport in passports %}
+        <tr>
+            <td>{{ passport.name }}</td>
+            <td>{{ passport.surname }}</td>
+            <td>{{ passport.sex }}</td>
+            <td>{{ passport.birth }}</td>
+            <td>{{ passport.pass_no }}</td>
+            <td>{{ passport.pass_exp }}</td>
+            <td>{{ passport.ident_no }}</td>
+            <td class="text-center"><a href="{{ url_for('profile.modify_passport', id = passport.id) }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a></td>
+            <td class="text-center"><a href="{{ url_for('profile.delete_passport', id = passport.id) }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+        </tr>
+        {% endif %}
+    </table>
 {% endblock %}
