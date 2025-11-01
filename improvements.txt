@@ -7,6 +7,7 @@ Pasaport kaydederken isim soyisim büyük harflerle olacak.
 Çalışanların yaptığı işlemleri tut.
 Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrolünü databaseden sorguyla kontrol ettiğini anlat.
 Role sistemini ve login required fonksiyonunu güncelle.
+Tüm kodları (kendi kod tekrarlarım da dahil olmak üzere) kopyala-yapıştır olmadan kendim yazdığım için bazı kod tekrarlarında farklılıklar ya da benzer mantıklarda farklı çözümler olabilir.
 
 
 Sıradaki: my_passports.html ayarla. Sonrasında modify_passport.html ayarla ve delete_passport route'unu ayarla.

@@ -10,13 +10,13 @@
     <div class="form-group">
         <label class="control-label col-sm-5" for="name">Name:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name" type="text" autofocus required>
+            <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name" type="text" pattern="^[A-Za-z ]+$" autofocus required>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-5" for="surname">Surname:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="surname" name="surname" autocomplete="off" placeholder="Surname" type="text" required>
+            <input class="form-control" id="surname" name="surname" autocomplete="off" placeholder="Surname" type="text" pattern="^[A-Za-z ]+$" required>
         </div>
     </div>
     <div class="form-group">
@@ -38,7 +38,7 @@
     <div class="form-group">
         <label class="control-label col-sm-5" for="pass_no">Passport No:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="pass_no" name="pass_no" placeholder="Passport No" autocomplete="off" type="text" required>
+            <input class="form-control" id="pass_no" name="pass_no" placeholder="Passport No" autocomplete="off" type="text" pattern="^[A-Za-z]?[0-9]{8}$" required>
         </div>
     </div>
     <div class="form-group">
@@ -50,7 +50,7 @@
     <div class="form-group">
         <label class="control-label col-sm-5" for="ident_no">Identification No:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="ident_no" name="ident_no" placeholder="Identification Number" autocomplete="off" type="text" required>
+            <input class="form-control" id="ident_no" name="ident_no" placeholder="Identification Number" autocomplete="off" type="text" pattern="^[0-9]{11}$" required>
         </div>
     </div>
     <div class="form-group text-center">

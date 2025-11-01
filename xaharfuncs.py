@@ -158,8 +158,8 @@ def valid_color(color):
 
 
 def valid_passno(pass_no):
-    pattern = r"^[A-Za-z]{1}[0-9]{8}$"
-
+    pattern = r"^[A-Za-z]?[0-9]{8}$"
+    
     return bool(match(pattern, pass_no))
 
 

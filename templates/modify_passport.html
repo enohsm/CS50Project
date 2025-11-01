@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Modify Passport
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="{{ url_for('profile.modify_passport', id = passport.id) }}" method="POST">
+    <h1>Modify Passport</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="name">Name:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="name" name="name" autocomplete="off" type="text" value="{{ passport.name }}" pattern="^[A-Za-z ]$" autofocus required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="surname">Surname:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="surname" name="surname" autocomplete="off" type="text" value="{{ passport.surname }}" pattern="^[A-Za-z ]$" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="sex">Sex:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="sex" name="sex" required>
+                {% if passport.sex == "MALE" %}
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+                {% else %}
+                <option value="male">Male</option>
+                <option value="female" selected>Female</option>
+                {% endif %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="birth">Birth Date:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="birth" name="birth" autocomplete="off" type="date" value="{{ passport.birth }}" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_no">Passport No:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="pass_no" name="pass_no" autocomplete="off" type="text" pattern="^[A-Za-z]?[0-9]{8}$" value="{{ passport.pass_no }}" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_exp">Date of Expiry:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="pass_exp" name="pass_exp" autocomplete="off" type="date" value="{{ passport.pass_exp }}" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5">Identification Number:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="ident_no" name="ident_no" autocomplete="off" type="text" pattern="^[0-9]{8}$" value="{{ passport.ident_no }}" required>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Modify Passport</button>
+    </div>
+</form>
+{% endblock %}

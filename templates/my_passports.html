@@ -6,6 +6,9 @@
 
 {% block main %}
     <h1>My Passports</h1>
+    <div class="text-center">
+    <a class="btn btn-info" style="margin-bottom: 35px" href="{{ url_for('profile.add_passport') }}">Add Passport</a>
+    </div>
     <table class="table">
         <tr>
             <th>Name</th>

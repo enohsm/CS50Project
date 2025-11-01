@@ -216,10 +216,12 @@ def add_passport():
             flash("This passport already registered in system.")
             return redirect(url_for("profile.add_passport"))
         
-        DataBase.execute("INSERT INTO passports (user_id, name, surname, sex, birth, pass_no, pass_exp, ident_no) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no)
-        flash("Your passport successfully registered.")
-        return redirect(url_for("profile.passports"))
-
+        try:
+            DataBase.execute("INSERT INTO passports (user_id, name, surname, sex, birth, pass_no, pass_exp, ident_no) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no)
+            flash("Your passport successfully registered.")
+            return redirect(url_for("profile.passports"))
+        except ValueError:
+            return x.apology('Error. Try again.', 'profile.add_passport')
     else:
         return render_template("add_passport.html")
 
@@ -262,13 +264,13 @@ def modify_passport():
         if not ident_no or not ident_no.isdigit() or len(ident_no) != 11:
             return x.apology('Invalid identification number. Form refreshed.', 'profile.modify_passport', id = passport_id)
         
-        isexist = DataBase.execute('SELECT * FROM passports WHERE pass_no = ?', pass_no)
+        isexist = DataBase.execute('SELECT * FROM passports WHERE pass_no = ? AND user_id != ?', pass_no, session['user_id'])
         if isexist:
             return x.apology('This passport is already registered in the system.', 'profile.modify_passport', id = passport_id)
         
         try:
             DataBase.execute('UPDATE passports SET name = ?, surname = ?, sex = ?, birth = ?, pass_no = ?, pass_exp = ?, ident_no = ? WHERE user_id = ? AND id = ?', name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no, session['user_id'], passport_id)
-            return x.apology('Your passport have successfully registered.', 'profile.passports')
+            return x.apology('Your passport has successfully modified.', 'profile.passports')
 
         except ValueError:
             return x.apology('Error, try again.', 'profile.modify_passport', id = passport_id)
@@ -281,18 +283,40 @@ def modify_passport():
         passport = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])
         if len(passport) != 1:
             return x.apology('Unauthorized access.', 'profile.vehicles')
+        
+        passport[0]['birth'] = datetime.strptime(passport[0]['birth'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        passport[0]['pass_exp'] = datetime.strptime(passport[0]['pass_exp'], '%d/%m/%Y').strftime('%Y-%m-%d')
 
         return render_template("modify_passport.html", passport=passport[0])
 
 
-@profilebp.route("/passports/delete")
+@profilebp.route("/passports/delete", methods=["GET", "POST"])
 @x.login_required
 def delete_passport():
-    passport_id = request.args.get('id')
-    passport = DataBase.execute('SELECT id FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])[0]['id']
-    if not passport:
-        return x.apology('Unauthorized access.', 'profile.passports')
-    
-    DataBase.execute('DELETE FROM passports WHERE id = ? AND user_id = ?', passport, session['user_id'])
+    if request.method == "POST":
+        passport_id = request.args.get('id')
+        if not passport_id:
+            return redirect(url_for('profiles.passports'))
 
-    return x.apology('Your passport successfully deleted.', 'profile.passports')
+        passport = DataBase.execute('SELECT id FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])
+        if not passport or len(passport) != 1:
+            return x.apology('Unauthorized access.', 'profile.passports')
+        
+        user_data = DataBase.execute('SELECT * FROM users WHERE id = ?', session['user_id'])
+        if not user_data:
+            return x.apology('Login and try again.', 'main.logout')
+        
+        cur_password = user_data[0]['password']
+
+        password = request.form.get('password')
+        if not password or not check_password_hash(cur_password, password):
+            return x.apology
+            
+        try:
+            DataBase.execute('DELETE FROM passports WHERE id = ? AND user_id = ?', passport[0]['id'], session['user_id'])
+            return x.apology('Your passport successfully deleted.', 'profile.passports')
+
+        except ValueError:
+            return x.apology('Error. Try again.', 'profile.passports')
+        
+    else:
