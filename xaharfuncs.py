@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from re import match
 from flask import redirect, session, flash, url_for
 from functools import wraps
@@ -166,3 +166,30 @@ def valid_passno(pass_no):
 def apology(message, route, **values):
     flash(message)
     return redirect(url_for(route, **values))
+
+
+def valid_country(country):
+    countries = ['BULGARIA', 'GREECE', 'GERMANY', 'NETHERLAND', 'AUSTRIA', 'ITALY']
+
+    if country not in countries:
+        return False
+    
+    return True
+
+
+def valid_prefdate(pref_date):
+    if datetime.strptime(pref_date, '%Y-%m-%d') < (datetime.today() + timedelta(weeks = 2)):
+        return False
+    return True
+
+
+def visatype(birth):
+    visatype = ''
+
+    if (datetime.today() - datetime.strptime(birth, '%d/%m/%Y').strftime('%Y-%m-%d')) >= timedelta(days = 365 * 12):
+        visatype = 'With Biometric'
+    
+    else:
+        visatype = 'Without Biometric'
+
+    return visatype
