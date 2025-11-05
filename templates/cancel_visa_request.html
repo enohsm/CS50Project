@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Visa Request Cancellation
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="{{ url_for('profile.cancellation_visa_request', id = request.id) }}" method="POST">
+    <h1>Visa Request Cancellation</h1>
+    <div class="form-group text-center">
+        <p>Do you confirm cancellation of your visa request for <b>{{ request.country }}</b> ?</p>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="password">Enter your password:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="password" name="password" autofocus autocomplete="off" type="password" required>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Confirm Cancellation</button>
+    </div>
+</form>
+{% endblock %}

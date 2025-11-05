@@ -169,7 +169,7 @@ def apology(message, route, **values):
 
 
 def valid_country(country):
-    countries = ['BULGARIA', 'GREECE', 'GERMANY', 'NETHERLAND', 'AUSTRIA', 'ITALY']
+    countries = ['BULGARIA', 'GREECE', 'GERMANY', 'NETHERLANDS', 'AUSTRIA', 'ITALY']
 
     if country not in countries:
         return False
@@ -193,3 +193,8 @@ def visatype(birth):
         visatype = 'Without Biometric'
 
     return visatype
+
+
+def file_query(file):
+    with open(file, 'r') as f:
+        return f.read()

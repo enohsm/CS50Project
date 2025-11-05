@@ -351,7 +351,7 @@ def documents():
 @x.login_required
 def requests():
     # Kullanıcının son 10 adet vize başvuru taleplerini sorgula (request_time DESC)
-    visa_requests = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ?', session['user_id'])
+    visa_requests = DataBase.execute(x.file_query('queries/visa_requests.sql'), session['user_id'])
 
     # Kullanıcının son 10 adet yeşil sigorta taleplerini sorgula (request_time DESC)
     gc_requests = DataBase.execute('SELECT * FROM gc_requests WHERE user_id = ?', session['user_id'])
@@ -372,15 +372,15 @@ def new_visa_request():
         # Pasaport verilerini değişkene al
         pass_data = DataBase.execute('SELECT * FROM passports WHERE user_id = ? AND pass_no = ?', session['user_id'], pass_no)
         if not pass_data or not len(pass_data) == 1:
-            x.apology('Passport data could not found.', 'profile_new_visa_request')
+            return x.apology('Passport data could not found.', 'profile.new_visa_request')
 
         # İstenilen ülkeyi formdan al
         country = request.form.get('country')
         if not country or not x.valid_country(country):
             return x.apology('Invalid country.', 'profile.new_visa_request')
         
-        # Bu pasaportun bu ülkeye halihazırda mevcut başvurusu var mı kontrol et
-        is_exist_request = DataBase.execute('SELECT * FROM visa_requests WHERE pass_id = ? AND country = ?', pass_data[0]['id'], country)
+        # Bu kullanıcının bu ülkeye halihazırda mevcut başvurusu var mı kontrol et (status = 2 / Sonuçlanmış başvuru /)
+        is_exist_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND country = ? AND status != ?', session['user_id'], country, '2')
         if is_exist_request:
             return x.apology('There is already a pending request for this passport name.', 'profile.new_visa_request')
 
@@ -392,13 +392,11 @@ def new_visa_request():
         # Vize başvurusunu kaydet (try-except)
         try:
             # Kaydedecek olan sorguyu yaz
-            DataBase.execute('INSERT INTO requests (user_id, pass_id, country, visa_type, prefferred_appointment_date) VALUES(?, ?, ?, ?, ?)', session['user_id'], pass_data[0]['id'], country.upper(), x.visatype(pass_data[0]['birth'], x.valid_date(pref_date)))
+            DataBase.execute('INSERT INTO visa_requests (user_id, pass_id, country, visa_type, prefferred_appointment_date) VALUES(?, ?, ?, ?, ?)', session['user_id'], pass_data[0]['id'], country.upper(), x.visatype(pass_data[0]['birth']), x.valid_date(pref_date))
             return x.apology('Your request has been successfully created.', 'profile.requests')
         
         except ValueError:
             return x.apology('An error occurred. Please try again.', 'profile.new_visa_request')
-
-        pass
 
     else:
         # Kullanıcının pasaportlarını sorgula
@@ -406,12 +404,12 @@ def new_visa_request():
         if not passports:
             return x.apology('You need to add a passport before you can create a new application.', 'profile.add_passport')
         
-        return render_template('new.visa_request.html', passports = passports)
+        return render_template('new_visa_request.html', passports = passports)
         
 
 
 # Vize randevu talebi düzenleme route'unu ayarla
-@profilebp.route('requests/visa/modify', methods=['GET', 'POST'])
+@profilebp.route('/requests/visa/modify', methods=['GET', 'POST'])
 @x.login_required
 def modify_visa_request():
     if request.method == 'POST':
@@ -439,32 +437,59 @@ def modify_visa_request():
         pass_data = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', pass_id, session['user_id'])
         if not pass_data or not len(pass_data) == 1:
             return x.apology('There is no passport associated with this number.', 'profile.modify')
+        
         # Pasaport id değişmişse pasaportun halihazırda başvurusu olup olmadığını kontrol et
+        if pass_id != visa_request[0]['pass_id']:
+            is_exist_request = DataBase.execute('SELECT * FROM requests WHERE pass_id = ?', pass_id)
+            if is_exist_request:
+                return x.apology('There is already an existing application for this passport number.', 'profile.modify_visa_request', id = visa_request_id)
         
         # Ülkeyi formdan al
-        # Ülke yoksa ya da geçersizse hata ver
+        country = request.form.get('country')
+        if not country or not x.valid_country(country):
+            return x.apology('Invalid country.', 'profile.modify_visa_request', id = visa_request_id)
+        
+        # Kullanıcının bu ülkeye aktif olan başka başvurusu var mı kontrol et
+        is_exist_country_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND id != ? AND country = ? AND status != ?', session['user_id'], visa_request_id, country, '2')
+        if is_exist_country_request:
+            return x.apology('You already have an active application for this country.', 'profile.modify_visa_request', id = visa_request_id)
 
         # Tercih edilen tarihi formdan al
-        # Tarih yoksa ya da geçersizse hata ver
+        pref_date = request.form.get('pref_date')
+        if not pref_date or not x.valid_date(pref_date) or not x.valid_prefdate(pref_date):
+            return x.apology('Invalid preffered date.', 'profile.modify_visa_request')
+        
+        # Vize tipini belirle
+        birth = pass_data[0]['birth']
+
+        visa_type = x.visatype(birth)
 
         # Bilgileri güncelle (try-except)
+        try:
             # Güncelleme sorgusu yaz sadece gelen verileri güncelle
-            
-            # Hata mesajı ver ve talepler sayfasına yönlendir
-        pass
+            DataBase.execute('UPDATE visa_requests SET pass_id = ?, country = ?, visa_type = ?, prefferred_appointment_date = ? WHERE id = ?', pass_id, country, visa_type, x.valid_date(pref_date), visa_request_id)
+            return x.apology('Your request has been successfully modified.', 'profile.requests')
+
+        # Hata yakalanırsa hata mesajı ver ve talepler sayfasına yönlendir
+        except ValueError:
+            return x.apology('An error occurred.', 'profile.requests')
     
     else:
         # Args ile başvuru numarasını al
-        # Args yoksa ya da numara değilse redirect yap
+        request_id = request.args.get('id')
+        if not request_id or not request_id.isdigit():
+            return redirect('profile.requests')
 
         # Başvuruyu sorgula
-        # Yoksa hata ver
+        request_q = DataBase.execute('SELECT * FROM visa_requests WHERE id = ? AND user_id = ?', request_id, session['user_id'])
+        if not request_q or len(request_q) != 1:
+            return x.apology('Unauthorized access.', 'profile.requests')
 
-        # Kullanıcının mevcut başvurudaki pasaportu haricindeki pasaportlarını sorgula
-        # Pasaport yoksa hata ver
+        # Kullanıcının pasaportlarını sorgula
+        passports = DataBase.execute('SELECT * FROM passports WHERE user_id = ?', session['user_id'])
 
         # Başvuruyu ve pasaportları html'e gönder
-        pass
+        return render_template('modify_visa_request.html', request = request_q, passports = passports)
 
 
 # Vize randevu talebi iptal etme route'unu ayarla
@@ -473,33 +498,55 @@ def modify_visa_request():
 def cancellation_visa_request():
     if request.method == 'POST':
         # Talep id'sini al
-        # Yoksa yada pozitif tam sayı değilse hata ver
+        request_id = request.args.get('id')
+        if not request_id or not request_id.isdigit():
+            return redirect(url_for('profile.requests'))
 
         # Talebi sorgula
+        visa_request = DataBase.execute('SELECT * FROM visa_requests WHERE id = ? AND user_id = ?', request_id, session['user_id'])
+        if not visa_request or len(visa_request) != 1:
+            return x.apology('Unauthorized access.', 'profile.requests')
+        
         # Talep status 0 değilse hata ver
+        if visa_request[0]['status'] != 0:
+            return x.apology('Cancellation not available after appointment creation.', 'profile.requests')
 
         # Kullanıcı bilgilerini sorgula
-        # Yoksa hata ver ve logout yap
+        user_data = DataBase.execute('SELECT * FROM users WHERE id = ?', session['user_id'])
+        if not user_data:
+            return x.apology('An error occurred. Please re-login.', 'main.logout')
 
         # Parolayı formdan al
-        # Parola yoksa ya da eşleşmiyorsa hata ver
+        password = request.form.get('password')
+        if not password or not check_password_hash(user_data[0]['password'], password):
+            return x.apology('Invalid password.', 'profile.cancellation_visa_request', id = request_id)
 
         # Talebi sil (try-except)
+        try:
             # Silme sorgusunu yaz
-            # Başarılı mesajı ver ve requests'e yönlendir
+            DataBase.execute('DELETE FROM visa_requests WHERE id = ? AND user_id = ?', request_id, session['user_id'])
+            return x.apology('Your request has been successfully cancelled.', 'profile.requests')
 
+        except ValueError:
             # Hata, sonra dene mesajı döndür, requests sayfasına yönlendir
-        pass
+            return x.apology('An error occurred. Please try again.', 'profile.requests')
 
     else:
         # Talep id'sini al
-        # Yoksa ya da pozitif tam sayı değilse hata ver
+        req_id = request.args.get('id')
+        if not req_id or not req_id.isdigit():
+            return redirect(url_for('profile.requests'))
 
         # Kullanıcının bu id'ye sahip talebini sorgula
-        # Yoksa ya da 1'den farklıysa hata ver
+        request_check = DataBase.execute('SELECT * FROM visa_requests WHERE id = ? AND user_id = ?', req_id, session['user_id'])
+        if not request_check or len(request_check) != 1:
+            return x.apology('Unauthorized access.', 'profile.requests')
         
+        if request_check[0]['status'] != 0:
+            return x.apology('Cancellation not available after appointment creation.', 'profile.requests')
+
         # Talep bilgilerini html'e gönder
-        pass
+        return render_template('cancel_visa_request.html', request = request_check[0])
 
 
 # Yeşil sigorta talebi oluşturma route'unu ayarla

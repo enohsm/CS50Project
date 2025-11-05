@@ -5,5 +5,18 @@
 {% endblock %}
 
 {% block main %}
-
+<form class="form-horizontal" action="{{ url_for('profile.new_visa_request') }}" method="post">
+    <h1>New Visa Request</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_no">Select Passport:</label>
+        <div class="col-sm-3">
+            <select class="form-control" id="pass_no" name="pass_no" required>
+                <option selected disabled>- Passport No. | Date of Expiry</option>
+                {% for passport in passports %}
+                <option value="{{ passport.pass_no }}">{{ passport.pass_no }} | {{ passport.pass_exp }} </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</form>
 {% endblock %}
