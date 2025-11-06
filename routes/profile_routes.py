@@ -183,29 +183,13 @@ def passports():
 @x.login_required
 def add_passport():
     if request.method == "POST":
-        name = request.form.get("name")
-        surname = request.form.get("surname")
-        if not name or not surname or not x.valid_name((name + " " + surname)):
-            flash("Invalid name/surname.")
-            return redirect(url_for("profile.add_passport"))
-        
-        sex = request.form.get("sex")
-        if not sex or sex not in ["male", "female"]:
-            flash("Invalid sex.")
-            return redirect(url_for("profile.add_passport"))
-        
-        birth = request.form.get("birth")
-        if not birth or not x.valid_date(birth):
-            flash("Invalid birth date.")
-            return redirect(url_for("profile.add_passport"))
-        
         pass_no = request.form.get("pass_no")
         if not pass_no or not x.valid_passno(pass_no):
             flash("Invalid passport number.")
             return redirect(url_for("profile.add_passport"))
         
         pass_exp = request.form.get("pass_exp")
-        if not pass_exp or not x.valid_date(pass_exp):
+        if not pass_exp or not x.valid_expdate(pass_exp):
             flash("Invalid date of expiry.")
             return redirect(url_for("profile.add_passport"))
         
@@ -214,8 +198,12 @@ def add_passport():
             flash("Invalid identification number.")
             return redirect(url_for("profile.add_passport"))
         
-        user_ident_no = DataBase.execute("SELECT ident_no FROM users WHERE id = ?", session["user_id"])[0]["ident_no"]
-        if user_ident_no != ident_no:
+        user_data = DataBase.execute('SELECT * FROM users WHERE id = ?', session['user_id'])
+        if not user_data or len(user_data) != 1:
+            return x.apology('An error occurred. Please re-login.', 'main.logout')
+        user = user_data[0]
+        
+        if user['ident_no'] != ident_no:
             flash("You are not owner of this passport.")
             return redirect(url_for("profile.add_passport"))
         
@@ -223,13 +211,15 @@ def add_passport():
         if passport:
             flash("This passport already registered in system.")
             return redirect(url_for("profile.add_passport"))
-        
+
         try:
-            DataBase.execute("INSERT INTO passports (user_id, name, surname, sex, birth, pass_no, pass_exp, ident_no) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no)
+            DataBase.execute("INSERT INTO passports (user_id, name, surname, sex, birth, pass_no, pass_exp, ident_no) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", user['id'], user['name'].upper(), user['surname'].upper(), user['sex'], user['birth'], pass_no.upper(), x.valid_date(pass_exp), user['ident_no'])
             flash("Your passport successfully registered.")
             return redirect(url_for("profile.passports"))
+        
         except ValueError:
             return x.apology('Error. Try again.', 'profile.add_passport')
+        
     else:
         return render_template("add_passport.html")
 
@@ -247,37 +237,19 @@ def modify_passport():
             flash("Unauthorized access.")
             return redirect(url_for('profile.passports'))
         
-        name = request.form.get("name")
-        surname = request.form.get("surname")
-        if not name or not x.valid_name(name + " " + surname):
-            return x.apology('Invalid name or surname. Form refreshed.', 'profile.modify_passport', id = passport_id)
+        if passport[0]['confirmed'] != 0:
+            return x.apology("The confirmed passport cannot be modify.", 'profile.passports')
         
-        sex = request.form.get("sex")
-        if not sex or sex not in ["male", "female"]:
-            return x.apology('Invalid sex. Form refreshed', 'profile.modify_passport', id = passport_id)
-        
-        birth = request.form.get('birth')
-        if not birth or not x.valid_date(birth):
-            return x.apology('Invalid birth date. Form refreshed.', 'profile.modify_passport', id = passport_id)
-        
-        pass_no = request.form.get('pass_no')
-        if not pass_no or not x.valid_passno(pass_no):
-            return x.apology('Invalid passport number. Form refreshed.', 'profile.modify_passport', id = passport_id)
+        passport_active_req = DataBase.execute('passport_active_request.sql', session['user_id'], passport_id)
+        if passport_active_req:
+            return x.apology('The deletion process cannot be completed because there is an active application.', 'profile.passports')
 
         pass_exp = request.form.get('pass_exp')
         if not pass_exp or not x.valid_date(pass_exp):
             return x.apology('Invalid passport number. Form refreshed.', 'profile.modify_passport', id = passport_id)
         
-        ident_no = request.form.get('ident_no')
-        if not ident_no or not ident_no.isdigit() or len(ident_no) != 11:
-            return x.apology('Invalid identification number. Form refreshed.', 'profile.modify_passport', id = passport_id)
-        
-        isexist = DataBase.execute('SELECT * FROM passports WHERE pass_no = ? AND user_id != ?', pass_no, session['user_id'])
-        if isexist:
-            return x.apology('This passport is already registered in the system.', 'profile.modify_passport', id = passport_id)
-        
         try:
-            DataBase.execute('UPDATE passports SET name = ?, surname = ?, sex = ?, birth = ?, pass_no = ?, pass_exp = ?, ident_no = ? WHERE user_id = ? AND id = ?', name.upper(), surname.upper(), sex.upper(), x.valid_date(birth), pass_no.upper(), x.valid_date(pass_exp), ident_no, session['user_id'], passport_id)
+            DataBase.execute('UPDATE passports SET pass_exp = ? WHERE user_id = ? AND id = ?', x.valid_date(pass_exp), session['user_id'], passport_id)
             return x.apology('Your passport has successfully modified.', 'profile.passports')
 
         except ValueError:
@@ -291,6 +263,13 @@ def modify_passport():
         passport = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])
         if len(passport) != 1:
             return x.apology('Unauthorized access.', 'profile.passports')
+        
+        if passport[0]['confirmed'] != 0:
+            return x.apology('The confirmed passport cannot be modify.', 'profile.passports')
+        
+        passport_active_req = DataBase.execute('passport_active_request.sql', session['user_id'], passport_id)
+        if passport_active_req:
+            return x.apology('The deletion process cannot be completed because there is an active application.', 'profile.passports')
         
         passport[0]['birth'] = datetime.strptime(passport[0]['birth'], '%d/%m/%Y').strftime('%Y-%m-%d')
         passport[0]['pass_exp'] = datetime.strptime(passport[0]['pass_exp'], '%d/%m/%Y').strftime('%Y-%m-%d')
@@ -309,6 +288,10 @@ def delete_passport():
         passport = DataBase.execute('SELECT id FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])
         if not passport or len(passport) != 1:
             return x.apology('Unauthorized access.', 'profile.passports')
+
+        passport_active_req = DataBase.execute('passport_active_request.sql', session['user_id'], passport_id)
+        if passport_active_req:
+            return x.apology('The deletion process cannot be completed because there is an active application.', 'profile.passports')
         
         user_data = DataBase.execute('SELECT * FROM users WHERE id = ?', session['user_id'])
         if not user_data:
@@ -335,6 +318,10 @@ def delete_passport():
         passport_data = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', passport_id, session['user_id'])
         if not len(passport_data) == 1:
             return x.apology('Unauthorized access.', 'profile.passports')
+        
+        passport_active_req = DataBase.execute('passport_active_request.sql', session['user_id'], passport_id)
+        if passport_active_req:
+            return x.apology('The deletion process cannot be completed because there is an active application.', 'profile.passports')
 
         return render_template('delete_passport.html', passport_id=passport_data[0]['id'], passport_no=passport_data[0]['pass_no'])
 
@@ -351,7 +338,7 @@ def documents():
 @x.login_required
 def requests():
     # Kullanıcının son 10 adet vize başvuru taleplerini sorgula (request_time DESC)
-    visa_requests = DataBase.execute(x.file_query('queries/visa_requests.sql'), session['user_id'])
+    visa_requests = DataBase.execute(x.file_query('visa_requests_limited.sql'), session['user_id'])
 
     # Kullanıcının son 10 adet yeşil sigorta taleplerini sorgula (request_time DESC)
     gc_requests = DataBase.execute('SELECT * FROM gc_requests WHERE user_id = ?', session['user_id'])
@@ -359,20 +346,38 @@ def requests():
     return render_template("my_requests.html", visa = visa_requests, greencard = gc_requests)
 
 
+# Visa requests route'unu ayarla
+@profilebp.route('/requests/visa')
+@x.login_required
+def visa_requests():
+    # Kullanıcının tüm vize taleplerini sorgula
+    visa_requests = DataBase.execute(x.file_query('visa_requests.sql'), session['user_id'])
+    if not visa_requests:
+        return x.apology('You do not have any visa requests.', 'profile.new_visa_request')
+    for request in visa_requests:
+        request['request_date'] = datetime.strptime(request['request_date'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y - %H:%M:%S')
+    
+    return render_template('my_visa_requests.html', requests = visa_requests)
+
 # Vize randevu talebi oluşturma route'unu ayarla
-@profilebp.route('/request/visa/new', methods=['GET', 'POST'])
+@profilebp.route('/requests/visa/new', methods=['GET', 'POST'])
 @x.login_required
 def new_visa_request():
     if request.method == 'POST':
         # Pasaport numarasını formdan al
         pass_no = request.form.get('pass_no')
         if not pass_no or not x.valid_passno(pass_no):
+            print(pass_no)
             return x.apology('Invalid passport.', 'profile.new_visa_request')
 
         # Pasaport verilerini değişkene al
         pass_data = DataBase.execute('SELECT * FROM passports WHERE user_id = ? AND pass_no = ?', session['user_id'], pass_no)
         if not pass_data or not len(pass_data) == 1:
             return x.apology('Passport data could not found.', 'profile.new_visa_request')
+
+        # Pasaport onaylanmamışsa hata ver
+        if pass_data[0]['confirmed'] == 0:
+            return x.apology('You cannot create request with unconfirmed passport.', 'profile.new_visa_request')
 
         # İstenilen ülkeyi formdan al
         country = request.form.get('country')
@@ -382,7 +387,7 @@ def new_visa_request():
         # Bu kullanıcının bu ülkeye halihazırda mevcut başvurusu var mı kontrol et (status = 2 / Sonuçlanmış başvuru /)
         is_exist_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND country = ? AND status != ?', session['user_id'], country, '2')
         if is_exist_request:
-            return x.apology('There is already a pending request for this passport name.', 'profile.new_visa_request')
+            return x.apology('There is already a pending request for this passport.', 'profile.new_visa_request')
 
         # Tercih edilen tarihi formdan al
         pref_date = request.form.get('pref_date')
@@ -400,13 +405,14 @@ def new_visa_request():
 
     else:
         # Kullanıcının pasaportlarını sorgula
-        passports = DataBase.execute('SELECT * FROM passports WHERE user_id = ?', session['user_id'])
+        passports = DataBase.execute('SELECT * FROM passports WHERE user_id = ? AND confirmed = 1', session['user_id'])
         if not passports:
-            return x.apology('You need to add a passport before you can create a new application.', 'profile.add_passport')
-        
-        return render_template('new_visa_request.html', passports = passports)
-        
+            return x.apology('There is no passport available for which you can create a request. Please add a new passport.', 'profile.add_passport')
 
+        countries = ['BULGARIA', 'GREECE', 'GERMANY', 'NETHERLANDS', 'AUSTRIA', 'ITALY']
+        
+        return render_template('new_visa_request.html', passports = passports, countries = countries)
+        
 
 # Vize randevu talebi düzenleme route'unu ayarla
 @profilebp.route('/requests/visa/modify', methods=['GET', 'POST'])
@@ -417,32 +423,15 @@ def modify_visa_request():
         visa_request_id = request.args.get('id')
         if not visa_request_id or not visa_request_id.isdigit():
             return redirect(url_for('profile.requests'))
-        # Args yoksa ya da numara değilse redirect yap
 
         # Başvuruyu başvuru id'siyle ve kullanıcı adıyla başvuruyu sorgula
-        visa_request = DataBase.execute('SELECT * FROM requests WHERE id = ? AND user_id = ?', visa_request_id, session['user_id'])
+        visa_request = DataBase.execute('SELECT * FROM visa_requests WHERE id = ? AND user_id = ?', visa_request_id, session['user_id'])
         if not visa_request or not len(visa_request) == 1:
             return x.apology('Unauthorized access.', 'profile.requests')
 
         # Talep beklemede değilse hata ver (status != 0)
         if visa_request[0]['status'] != 0:
             return x.apology('Changes cannot be made because your appointment has already been created.', 'profile.requests')
-
-        # Pasaport bilgisini formdan al
-        pass_id = request.form.get('pass_id')
-        if not pass_id or not pass_id.isdigit():
-            return x.apology('Invalid passport.', 'profile.modify_visa_request', id = visa_request_id)
-        
-        # Pasaport yoksa hata ver
-        pass_data = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', pass_id, session['user_id'])
-        if not pass_data or not len(pass_data) == 1:
-            return x.apology('There is no passport associated with this number.', 'profile.modify')
-        
-        # Pasaport id değişmişse pasaportun halihazırda başvurusu olup olmadığını kontrol et
-        if pass_id != visa_request[0]['pass_id']:
-            is_exist_request = DataBase.execute('SELECT * FROM requests WHERE pass_id = ?', pass_id)
-            if is_exist_request:
-                return x.apology('There is already an existing application for this passport number.', 'profile.modify_visa_request', id = visa_request_id)
         
         # Ülkeyi formdan al
         country = request.form.get('country')
@@ -457,17 +446,12 @@ def modify_visa_request():
         # Tercih edilen tarihi formdan al
         pref_date = request.form.get('pref_date')
         if not pref_date or not x.valid_date(pref_date) or not x.valid_prefdate(pref_date):
-            return x.apology('Invalid preffered date.', 'profile.modify_visa_request')
-        
-        # Vize tipini belirle
-        birth = pass_data[0]['birth']
-
-        visa_type = x.visatype(birth)
+            return x.apology('Invalid preffered date.', 'profile.modify_visa_request', id = visa_request_id)
 
         # Bilgileri güncelle (try-except)
         try:
             # Güncelleme sorgusu yaz sadece gelen verileri güncelle
-            DataBase.execute('UPDATE visa_requests SET pass_id = ?, country = ?, visa_type = ?, prefferred_appointment_date = ? WHERE id = ?', pass_id, country, visa_type, x.valid_date(pref_date), visa_request_id)
+            DataBase.execute('UPDATE visa_requests SET country = ?, prefferred_appointment_date = ? WHERE id = ?', country, x.valid_date(pref_date), visa_request_id)
             return x.apology('Your request has been successfully modified.', 'profile.requests')
 
         # Hata yakalanırsa hata mesajı ver ve talepler sayfasına yönlendir
@@ -484,16 +468,23 @@ def modify_visa_request():
         request_q = DataBase.execute('SELECT * FROM visa_requests WHERE id = ? AND user_id = ?', request_id, session['user_id'])
         if not request_q or len(request_q) != 1:
             return x.apology('Unauthorized access.', 'profile.requests')
-
-        # Kullanıcının pasaportlarını sorgula
-        passports = DataBase.execute('SELECT * FROM passports WHERE user_id = ?', session['user_id'])
+        
+        # Talep beklemede değilse hata ver
+        if request_q[0]['status'] != 0:
+            return x.apology('Changes cannot be made because your appointment has already been created.', 'profile.requests')
+        
+        request_q[0]['prefferred_appointment_date'] = datetime.strptime(request_q[0]['prefferred_appointment_date'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        print(request_q[0]['prefferred_appointment_date'])
+        passport = DataBase.execute('SELECT pass_no, pass_exp FROM passports WHERE id = ?', request_q[0]['pass_id'])
+        if not passport:
+            return x.apology('Your passport could not found.', 'profile.requests')
 
         # Başvuruyu ve pasaportları html'e gönder
-        return render_template('modify_visa_request.html', request = request_q, passports = passports)
+        return render_template('modify_visa_request.html', request = request_q[0], passport = passport[0], countries = sorted(x.countries()))
 
 
 # Vize randevu talebi iptal etme route'unu ayarla
-@profilebp.route('requests/visa/cancel', methods=['GET', 'POST'])
+@profilebp.route('/requests/visa/cancel', methods=['GET', 'POST'])
 @x.login_required
 def cancellation_visa_request():
     if request.method == 'POST':

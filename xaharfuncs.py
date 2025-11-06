@@ -20,6 +20,24 @@ def valid_date(date):
     except ValueError:
         return False
     
+
+def valid_birthdate(birth):
+    try:
+        if not datetime.strptime(birth, '%Y-%m-%d') < datetime.today():
+            return False
+        return True
+    except ValueError:
+        return False
+
+
+def valid_expdate(expdate):
+    try:
+        if not datetime.strptime(expdate, '%Y-%m-%d') > (datetime.today() + timedelta(days = 364)):
+            return False
+        return True
+    except:
+        return False
+    
     
 def valid_password(password):
     pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.{8,}).*$"
@@ -186,7 +204,7 @@ def valid_prefdate(pref_date):
 def visatype(birth):
     visatype = ''
 
-    if (datetime.today() - datetime.strptime(birth, '%d/%m/%Y').strftime('%Y-%m-%d')) >= timedelta(days = 365 * 12):
+    if (datetime.today() - datetime.strptime(birth, '%d/%m/%Y')) >= timedelta(days = 365 * 12):
         visatype = 'With Biometric'
     
     else:
@@ -196,5 +214,9 @@ def visatype(birth):
 
 
 def file_query(file):
-    with open(file, 'r') as f:
-        return f.read()
+    with open(f'queries/{file}', 'r') as readf:
+        return readf.read()
+
+
+def countries():
+    return ['BULGARIA', 'GREECE', 'GERMANY', 'NETHERLANDS', 'AUSTRIA', 'ITALY']

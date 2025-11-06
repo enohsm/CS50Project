@@ -52,9 +52,14 @@ def register():
             flash("Invalid name/surname.")
             return redirect("/register")
         
+        sex = request.form.get("sex")
+        if not sex or sex not in ["male", "female"]:
+            flash("Invalid sex.")
+            return redirect("/register")
+        
         # Doğum tarihini formatı doğru mu?
         birth = request.form.get("birth")
-        if not birth or not x.valid_date(birth):
+        if not birth or not x.valid_birthdate(birth):
             flash("Invalid birth date.")
             return redirect("/register")
 
@@ -87,12 +92,13 @@ def register():
 
         # KAYIT
         try:
-            DataBase.execute("INSERT INTO users (username, password, name, surname, birth, ident_no, email, contact) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), name.capitalize(), surname.capitalize(), x.valid_date(birth), ident_no, email, contact)
+            DataBase.execute("INSERT INTO users (username, password, name, surname, sex, birth, ident_no, email, contact) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), name.capitalize(), surname.capitalize(), sex.upper(), x.valid_date(birth), ident_no, email, contact)
             DataBase.execute("INSERT INTO roles (user_id) VALUES((SELECT id FROM users WHERE username = ?))", username)
             flash("You have successfully registered.")
             return redirect("/login")
         except ValueError:
             flash("An error occured, please try again.")
+            return redirect('/register')
     else:
         if "user_id" in session:
             flash("You are already logged in.")

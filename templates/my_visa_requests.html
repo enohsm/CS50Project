@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Visa Requests
+{% endblock %}
+
+{% block main %}
+<h1>Visa Requests</h1>
+<table class="table">
+    <div class="text-center" style="margin-bottom: 10px">
+        <a class="btn btn-success" href="{{ url_for('profile.new_visa_request') }}">New Visa Request</a>
+    </div>
+    <tr>
+        <th>Passport No.</th>
+        <th>Country</th>
+        <th>App. Type</th>
+        <th>Pref. App. Date</th>
+        <th>Request Date</th>
+        <th>Status</th>
+        <th>Appointment Date</th>
+        <th>Result Date</th>
+        <th class="text-center">Modify</th>
+        <th class="text-center">Cancel</th>
+    </tr>
+    {% for request in requests %}
+    <tr>
+        <td>{{ request.pass_no }}</td>
+        <td>{{ request.country }}</td>
+        <td>{{ request.app_type }}</td>
+        <td>{{ request.pref_app_date }}</td>
+        <td>{{ request.request_date }}</td>
+        <td style="color:{% if request.stat == 0 %}orange{% elif request.stat == 1 %}blue{% else %}green{% endif %}"><b>
+            {% if request.stat == 0 %}
+            Waiting for appointment confirmation...
+            {% elif request.stat == 1 %}
+            Appointment confirmed.
+            {% else %}
+            Application completed.
+            {% endif %}
+        </b></td>
+        <td>{{ request.app_date }}</td>
+        <td>{{ request.result_date }}</td>
+        {% if request.stat == 0 %}
+        <td class="text-center"><a href="{{ url_for('profile.modify_visa_request', id = request.id) }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a>
+        <td class="text-center"><a href="{{ url_for('profile.cancellation_visa_request', id = request.id) }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
+        {% else %}
+        <td class="text-center"><i class="bi bi-pencil-fill" style="color: grey"></i></td>
+        <td class="text-center"><i class="bi bi-trash3-fill" style="color: grey"></i></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
