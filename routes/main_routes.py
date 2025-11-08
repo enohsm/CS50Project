@@ -134,7 +134,7 @@ def login():
         session["username"] = user[0]["username"]
         session["name"] = user[0]["name"]
         session["role"] = user[0]["role"]
-        return redirect(f"/dashboard/{session["role"]}")
+        return redirect(url_for('main.homepage'))
         
     else:
         if "user_id" in session:

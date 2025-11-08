@@ -103,3 +103,9 @@ main {
     border-left: 5px solid rgb(255, 191, 0);
     box-shadow: 1px 4px rgb(177, 177, 177);
 }
+
+.xahar-table {
+    width: 85%;
+    margin: auto;
+    margin-bottom: 85px;
+}

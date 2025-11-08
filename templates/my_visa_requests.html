@@ -8,7 +8,7 @@
 <h1>Visa Requests</h1>
 <table class="table">
     <div class="text-center" style="margin-bottom: 10px">
-        <a class="btn btn-success" href="{{ url_for('profile.new_visa_request') }}">New Visa Request</a>
+        <a class="btn btn-success" href="{{ url_for('request.new_visa_request') }}">New Visa Request</a>
     </div>
     <tr>
         <th>Passport No.</th>
@@ -22,32 +22,45 @@
         <th class="text-center">Modify</th>
         <th class="text-center">Cancel</th>
     </tr>
-    {% for request in requests %}
+    {% if visa_requests %}
+    {% for requ in visa_requests %}
     <tr>
-        <td>{{ request.pass_no }}</td>
-        <td>{{ request.country }}</td>
-        <td>{{ request.app_type }}</td>
-        <td>{{ request.pref_app_date }}</td>
-        <td>{{ request.request_date }}</td>
-        <td style="color:{% if request.stat == 0 %}orange{% elif request.stat == 1 %}blue{% else %}green{% endif %}"><b>
-            {% if request.stat == 0 %}
+        <td>{{ requ.pass_no }}</td>
+        <td>{{ requ.country }}</td>
+        <td>{{ requ.app_type }}</td>
+        <td>{{ requ.pref_app_date }}</td>
+        <td>{{ requ.request_date }}</td>
+        <td style="color:{% if requ.stat == 0 %}orange{% elif requ.stat == 1 %}blue{% else %}green{% endif %}"><b>
+            {% if requ.stat == 0 %}
             Waiting for appointment confirmation...
-            {% elif request.stat == 1 %}
+            {% elif requ.stat == 1 %}
             Appointment confirmed.
             {% else %}
             Application completed.
             {% endif %}
         </b></td>
-        <td>{{ request.app_date }}</td>
-        <td>{{ request.result_date }}</td>
-        {% if request.stat == 0 %}
-        <td class="text-center"><a href="{{ url_for('profile.modify_visa_request', id = request.id) }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a>
-        <td class="text-center"><a href="{{ url_for('profile.cancellation_visa_request', id = request.id) }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
+        <td>{{ requ.app_date }}</td>
+        <td>{{ requ.result_date }}</td>
+        {% if requ.stat == 0 %}
+        <td class="text-center"><a href="{{ url_for('request.modify_visa_request', id = requ.id) }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a>
+        <td class="text-center"><a href="{{ url_for('request.cancellation_visa_request', id = requ.id) }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
         {% else %}
         <td class="text-center"><i class="bi bi-pencil-fill" style="color: grey"></i></td>
         <td class="text-center"><i class="bi bi-trash3-fill" style="color: grey"></i></td>
         {% endif %}
     </tr>
     {% endfor %}
+    {% else %}
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td class="text-center"><i class="bi bi-pencil-fill" style="color: grey"></i></td>
+    <td class="text-center"><i class="bi bi-trash3-fill" style="color: grey"></i></td>
+    {% endif %}
 </table>
 {% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Greencard Requests
+{% endblock %}
+
+{% block main %}
+<h1>Greencard Requests</h1>
+<table class="table">
+    <div class="text-center" style="margin-bottom: 10px">
+        <a class="btn btn-success" href="{{ url_for('request.new_gc_request') }}">New Greencard Request</a>
+    </div>
+    <tr>
+        <th>Plate</th>
+        <th>Start Date</th>
+        <th>Period</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th class="text-center">Modify</th>
+        <th class="text-center">Cancel</th>
+    </tr>
+    {% if greencards %}
+    {% for greencard in greencards %}
+    <tr>
+        <td>{{ greencard.plate }}</td>
+        <td>{{ greencard.startdate }}</td>
+        <td>{% if greencard.cov_period == '3M' %}
+            3 Months
+            {% elif greencard.cov_period == '1M' %}
+            1 Month
+            {% elif greencard.cov_period == '15D' %}
+            15 Days
+            {% endif %}
+        </td>
+        <td style="color:{% if greencard.stat == 0 %}orange{% elif greencard.stat == 1 %}green{% endif %}"><b>
+            {% if greencard.stat == 0 %}
+            Green card insurance is being prepared...
+            {% elif greencard.stat == 1 %}
+            Green card insurance has been prepared.
+            {% endif %}
+        </b></td>
+        <td>{{ greencard.request_date }} | UTC</td>
+        {% if greencard.stat == 0 %}
+        <td class="text-center"><a href="{{ url_for('request.modify_gc_request', id = greencard.id) }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a>
+        <td class="text-center"><a href="{{ url_for('request.cancellation_gc_request', id = greencard.id) }}"><i class="bi bi-trash3-fill" style="color: red"></i></a></td>
+        {% else %}
+        <td class="text-center"><i class="bi bi-pencil-fill" style="color: grey"></i></td>
+        <td class="text-center"><i class="bi bi-trash3-fill" style="color: grey"></i></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% else %}
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td>NO DATA</td>
+    <td class="text-center"><i class="bi bi-pencil-fill" style="color: grey"></i></td>
+    <td class="text-center"><i class="bi bi-trash3-fill" style="color: grey"></i></td>
+    {% endif %}
+</table>
+{% endblock %}

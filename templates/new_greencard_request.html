@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    New Greencard Request
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="{{ url_for('request.new_gc_request') }}" method="post">
+    <h1>New Greencard Request</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="vehicle">Vehicle:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="vehicle" name="vehicle" required>
+                <option selected disabled>Plate | Brand | Color</option>
+                {% for vehicle in vehicles %}
+                <option value="{{ vehicle.id }}">{{ vehicle.plate }} | {{ vehicle.brand }} | {{ vehicle.color }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="start_date">Start Date:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="start_date" name="start_date" autocomplete="off" type="date" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="">Period:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="cov_period" name="cov_period" required>
+                <option selected disabled>Select Period</option>
+                <option value="15D">15 Days</option>
+                <option value="1M">1 Month</option>
+                <option value="3M">3 Months</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Create Request</button>
+    </div>
+</form>
+{% endblock %}

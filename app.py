@@ -1,9 +1,8 @@
 from flask import Flask, session
 from routes.main_routes import mainbp
-from routes.greencard_routes import gcbp
-from routes.visa_routes import visabp
+from routes.request_routes import requestbp
 from routes.profile_routes import profilebp
-from routes.dashboard_routes import dashboardbp
+from routes.dashboard_routes import dbbp
 
 
 app = Flask(__name__)
@@ -18,19 +17,19 @@ app.jinja_env.auto_reload = True
 def logged_in():
     return dict(
         logged_in = ("user_id" in session),
-        username = session.get("username", "Guest"),
-        name = session.get("name"),
-        role = session.get("role")
+        user__username = session.get("username", "Guest"),
+        user__name = session.get("name"),
+        user__role = session.get("role")
         )
 
 
 # EN: Registering blueprints for the routes
 # TR: Rotalar için modülleri ekliyorum
 app.register_blueprint(mainbp)
-app.register_blueprint(gcbp)
-app.register_blueprint(visabp)
+app.register_blueprint(requestbp)
 app.register_blueprint(profilebp)
-app.register_blueprint(dashboardbp)
+app.register_blueprint(dbbp)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

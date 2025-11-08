@@ -6,47 +6,98 @@
 
 {% block main %}
 <h1>My Requests</h1>
-<div class="text-center" style="margin-bottom: 10px">
-    <a class="btn btn-success" href="{{ url_for('profile.new_visa_request') }}">New Visa Request</a>
+<div class="xahar-table">
+    <label for="visa_requests" style="margin-bottom: 10px; font-size: 20px">Visa Requests:</label>
+    <div class="text-center" style="margin-bottom: 10px">
+        <a class="btn btn-success" href="{{ url_for('request.new_visa_request') }}">New Visa Request</a>
+    </div>
+    <table class="table" id="visa_requests">
+        <tr>
+            <th>Passport No.</th>
+            <th>Country</th>
+            <th>App. Type</th>
+            <th>Prefferred App. Date</th>
+            <th>Status</th>
+        </tr>
+        {% if visa %}
+        {% for requ in visa %}
+        <tr>
+            <td>{{ requ.pass_no }}</td>
+            <td>{{ requ.country }}</td>
+            <td>{{ requ.app_type }}</td>
+            <td>{{ requ.pref_app_date }}</td>
+            <td style="color:{% if requ.stat == 0 %}orange{% elif requ.stat == 1 %}blue{% else %}green{% endif %}"><b>
+                {% if requ.stat == 0 %}
+                Waiting for appointment confirmation...
+                {% elif requ.stat == 1 %}
+                Appointment confirmed.
+                {% else %}
+                Application completed.
+                {% endif %}
+            </b></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+        </tr>
+        {% endif %}
+    </table>
+    <div class="text-center">
+        <p>You are listing your last <b>{{ count_visa }}</b> visa requests.</p>
+        <a href="{{ url_for('request.visa_requests') }}">Show More</a>
+    </div>
 </div>
-<label for="visa_requests" style="margin-bottom: 10px; font-size: 20px">Awaiting Visa Requests:</label>
-<table class="table" id="visa_requests">
-    <tr>
-        <th>Passport No.</th>
-        <th>Country</th>
-        <th>App. Type</th>
-        <th>Prefferred App. Date</th>
-        <th>Status</th>
-    </tr>
-    {% if visa %}
-    {% for request in visa %}
-    <tr>
-        <td>{{ request.pass_no }}</td>
-        <td>{{ request.country }}</td>
-        <td>{{ request.app_type }}</td>
-        <td>{{ request.pref_app_date }}</td>
-        <td style="color:{% if request.stat == 0 %}orange{% elif request.stat == 1 %}blue{% else %}green{% endif %}"><b>
-            {% if request.stat == 0 %}
-            Waiting for appointment confirmation...
-            {% elif request.stat == 1 %}
-            Appointment confirmed.
-            {% else %}
-            Application completed.
-            {% endif %}
-        </b></td>
-    </tr>
-    {% endfor %}
-    {% else %}
-    <tr>
-        <td>NO DATA</td>
-        <td>NO DATA</td>
-        <td>NO DATA</td>
-        <td>NO DATA</td>
-        <td>NO DATA</td>
-    </tr>
-    {% endif %}
-</table>
-<div class="text-center">
-    <a href="{{ url_for('profile.visa_requests') }}">Show More</a>
+<div class="xahar-table">
+    <label for="gc_requests" style="margin-bottom: 10px; font-size: 20px">Greencard Requests:</label>
+    <div class="text-center" style="margin-bottom: 10px">
+        <a class="btn btn-success" href="{{ url_for('request.new_gc_request') }}">New Greencard Request</a>
+    </div>
+    <table class="table" id="gc_requests">
+        <tr>
+            <th>Plate</th>
+            <th>Start Date</th>
+            <th>Cover Period</th>
+            <th>Status</th>
+        </tr>
+        {% if greencard %}
+        {% for requ in greencard %}
+        <tr>
+            <td>{{ requ.plate }}</td>
+            <td>{{ requ.startdate }}</td>
+            <td>{% if requ.cov_period == '3M' %}
+                3 Months
+                {% elif requ.cov_period == '1M' %}
+                1 Month
+                {% elif requ.cov_period == '15D' %}
+                15 Days
+                {% endif %}
+            </td>
+            <td style="color:{% if requ.stat == 0 %}orange{% elif requ.stat == 1 %}green{% endif %}"><b>
+                {% if requ.stat == 0 %}
+                Green card insurance is being prepared...
+                {% elif requ.stat == 1 %}
+                Green card insurance has been prepared.
+                {% endif %}
+            </b></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+        </tr>
+        {% endif %}
+    </table>
+    <div class="text-center">
+        <p>You are listing your last <b>{{ count_gc }}</b> visa requests.</p>
+        <a href="{{ url_for('request.gc_requests') }}">Show More</a>
+    </div>
 </div>
 {% endblock %}

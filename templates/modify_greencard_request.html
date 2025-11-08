@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block javascript2 %}
+<script src="{{ url_for('static', filename='start_date.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Modify Green Card Request
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" action="{{ url_for('request.modify_gc_request', id = greencard.id) }}" method="post">
+    <h1>Modify Green Card Request</h1>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="vehicle">Vehicle:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="vehicle" required>
+                <option disabled>Plate | Brand | Color</option>
+                <option selected>{{ greencard.plate }} | {{ greencard.brand }} | {{ greencard.color }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="start_date">Start Date:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="start_date" name="start_date" autocomplete="off" type="date" value="{{ greencard.startdate }}" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="cov_period">Period:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="cov_period" name="cov_period" required>
+                <option disabled>- Select Period -</option>
+                {% for period in periods %}
+                <option value="{{ period }}"{% if period == greencard.cov_period %} selected{% endif %}>{% if period == '3M' %}3 Months{% elif period == '1M' %}1 Month{% elif period == '15D' %}15 Days{% endif %}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Modify Request</button>
+    </div>
+</form>
+{% endblock %}

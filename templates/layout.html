@@ -21,12 +21,6 @@
                         <span class="menu-text">My Profile</span>
                     </li>
                 </a>
-                <a href="/me/documents">
-                    <li>
-                        <i class="bi bi-file-earmark-ruled-fill"></i>
-                        <span class="menu-text">My Documents</span>
-                    </li>
-                </a>
                 <a href="/me/passports">
                     <li>
                         <i class="bi bi-passport-fill"></i>
@@ -43,24 +37,6 @@
                     <li>
                         <i class="bi bi-hourglass-split"></i>
                         <span class="menu-text">My Requests</span>
-                    </li>
-                </a>
-                <a href="/visa/request">
-                    <li>
-                        <i class="bi bi-person-vcard-fill"></i>
-                        <span class="menu-text">Visa Application Request</span>
-                    </li>
-                </a>
-                <a href="/greencard/request">
-                    <li>
-                        <i class="bi bi-postcard-fill"></i>
-                        <span class="menu-text">Green Card Request</span>
-                    </li>
-                </a>
-                <a href="/visa/statistics">
-                    <li>
-                        <i class="bi bi-clipboard-data-fill"></i>
-                        <span class="menu-text">Visa Application Statistics</span>
                     </li>
                 </a>
             </ul>
@@ -81,19 +57,14 @@
                         {% if logged_in %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ name }} <span class="caret"></span></a>
+                                {{ user__name }} <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    {% if role == "user" %}
                                     <li><a href="/me">Profile</a></li>
-                                    <li><a href="/dashboard/user">User Dashboard</a></li>
-                                    {% elif role == "employee" %}
-                                    <li><a href="/me">Profile</a></li>
-                                    <li><a href="/dashboard/user">User Dashboard</a></li>
-                                    <li><a href="/dashboard/employee">Employee Dashboard</a></li>
-                                    {% elif role == "admin" %}
-                                    <li><a href="/me">Profile</a></li>
-                                    <li><a href="/dashboard/user">User Dashboard</a></li>
-                                    <li><a href="/dashboard/admin">Admin Dashboard</a></li>
+                                    {% if user__role > 0 %}
+                                    <li><a href="{{ url_for('dashboard.employee_db') }}">Employee Dashboard</a></li>
+                                    {% endif %}
+                                    {% if user__role > 1 %}
+                                    <li><a href="#">Admin Dashboard</a></li>
                                     {% endif %}
                                 </ul>
                         </li>

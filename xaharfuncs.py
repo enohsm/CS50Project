@@ -97,7 +97,14 @@ def login_required(arg=None):
         return xahar_login
     
     else:
-        role = arg
+        str_role = arg
+        role = 0
+
+        if str_role == 'employee':
+            role = 1
+        
+        elif str_role == 'admin':
+            role = 2
 
         def login_required_permission(func):
             @wraps(func)
@@ -108,7 +115,7 @@ def login_required(arg=None):
                     return redirect(url_for("main.login"))
                 
                 else:
-                    if session["role"] != role:
+                    if session["role"] < role:
                         flash("You do not have permission to see this page.")
                         return redirect(url_for("main.homepage"))
                     return func(*args, **kwargs)
@@ -220,3 +227,13 @@ def file_query(file):
 
 def countries():
     return ['BULGARIA', 'GREECE', 'GERMANY', 'NETHERLANDS', 'AUSTRIA', 'ITALY']
+
+
+def valid_startdate(start_date):
+    try:
+        startdate = datetime.strptime(start_date, '%Y-%m-%d')
+        if startdate.date() < datetime.today().date():
+            return False
+        return True
+    except ValueError:
+        return False

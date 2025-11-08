@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" action="{{ url_for('profile.modify_visa_request', id = request.id) }}" method="post">
+<form class="form-horizontal" action="{{ url_for('request.modify_visa_request', id = requ.id) }}" method="post">
     <h1>Modify Visa Request</h1>
     <div class="form-group">
         <label class="control-label col-sm-5" for="passport">Your Passport:</label>
@@ -22,7 +22,7 @@
             <select class="form-control" id="country" name="country" required>
                 <option disabled>Select Country</option>
                 {% for country in countries %}
-                <option value="{{ country }}"{% if country == request.country %} selected{% endif %}>{{ country }}</option>
+                <option value="{{ country }}"{% if country == requ.country %} selected{% endif %}>{{ country }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -30,7 +30,7 @@
     <div class="form-group">
         <label class="control-label col-sm-5" for="pref_date">Prefferred Appointment Date:</label>
         <div class="col-sm-2">
-            <input class="form-control" id="pref_date" name="pref_date" type="date" value="{{ request.prefferred_appointment_date }}" required>
+            <input class="form-control" id="pref_date" name="pref_date" type="date" value="{{ requ.prefferred_appointment_date }}" required>
         </div>
     </div>
     <div class="form-group text-center">
