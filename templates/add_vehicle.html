@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" action="/me/vehicles/add" method="post">
+<form class="form-horizontal" action="/me/vehicles/add" method="post" enctype="multipart/form-data">
     <h1>Add Vehicle</h1>
     <div class="form-group">
         <label class="control-label col-sm-5" for="name">Name & Surname:</label>
@@ -61,6 +61,12 @@
         <label class="control-label col-sm-5" for="color">Color:</label>
         <div class="col-sm-2">
             <input class="form-control" id="color" name="color" autocomplete="off" placeholder="Color" type="text" pattern="^[A-Za-z -()]+$" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="vehicle_img">Vehicle Image:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="vehicle_img" name="vehicle_img" type="file" accept=".jpg,.jpeg,.png" required>
         </div>
     </div>
     <div class="form-group text-center">

@@ -3,6 +3,8 @@ from re import match
 from flask import redirect, session, flash, url_for
 from functools import wraps
 import requests
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 
 # EN: 
 # TR: Programımda kullandığım kendi fonksiyonlarım
@@ -237,3 +239,22 @@ def valid_startdate(start_date):
         return True
     except ValueError:
         return False
+    
+
+def valid_image(image):
+    meta = image.read(8)
+    image.seek(0)
+    print(meta)
+    if meta == b'\x89PNG\r\n\x1a\n' or meta[:3] == b'\xff\xd8\xff':
+        return True
+    
+    else:
+        return False
+    
+
+def new_filename(filename):
+    sec_filename = secure_filename(filename.lower())
+    ext = f'.{sec_filename.rsplit('.', 1)[-1]}'
+    new_filename = f'{uuid4().hex}{ext}'
+    
+    return new_filename

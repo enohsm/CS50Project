@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" action="{{ url_for('profile.add_passport') }}" method="post">
+<form class="form-horizontal" action="{{ url_for('profile.add_passport') }}" method="post" enctype="multipart/form-data">
     <h1>Add Passport</h1>
     <div class="form-group">
         <label class="control-label col-sm-5" for="pass_no">Passport No:</label>
@@ -27,6 +27,12 @@
         <label class="control-label col-sm-5" for="ident_no">Identification No:</label>
         <div class="col-sm-2">
             <input class="form-control" id="ident_no" name="ident_no" placeholder="Identification Number" autocomplete="off" type="text" pattern="^[0-9]{11}$" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_img">Passport Image:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="pass_img" name="pass_img" type="file" accept=".jpg,.jpeg,.png" required>
         </div>
     </div>
     <div class="form-group text-center">
