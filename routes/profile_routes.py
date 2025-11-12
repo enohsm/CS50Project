@@ -298,8 +298,14 @@ def view_passport():
         return redirect('profile.passports')
     
     is_users_pass = DataBase.execute('SELECT * FROM passports WHERE id = ? AND user_id = ?', pass_id, session['user_id'])
-    if not is_users_pass or len(is_users_pass) != 1:
-        return x.apology('Unauthorized access.', 'profile.passports')
+
+    if session['role'] < 1:
+        if not is_users_pass or len(is_users_pass) != 1:
+            return x.apology('Unauthorized access.', 'profile.passports')
+    
+    elif session['role'] == 2:
+        if not is_users_pass or len(is_users_pass) != 1 or is_users_pass[0]['confirmed'] != 0:
+            return x.apology('Passport image could not found or unauthorized access.', 'dashboard.passport_confirmation')
     
     return render_template('view_passport.html', passport = is_users_pass[0]['img'])
 

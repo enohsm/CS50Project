@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Passport Confirmation
+{% endblock %}
+
+{% block main %}
+<h1>Passport Confirmation</h1>
+<table class="table">
+    <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Passport No.</th>
+        <th>Sex</th>
+        <th>Birth Date</th>
+        <th>Date of Expiry</th>
+        <th>Identification No.</th>
+        <th class="text-center">View</th>
+        <th class="text-center">Confirm</th>
+        <th class="text-center">Decline</th>
+        
+    </tr>
+    {% if passports %}
+    {% for passport in passports %}
+    <tr>
+        <td>{{ passport.username }}</td>
+        <td>{{ passport.name }}</td>
+        <td>{{ passport.surname }}</td>
+        <td>{{ passport.pass_no }}</td>
+        <td>{{ passport.sex }}</td>
+        <td>{{ passport.birth }}</td>
+        <td>{{ passport.pass_exp }}</td>
+        <td>{{ passport.ident_no }}</td>
+        <td class="text-center"><a href="{{ url_for('profile.view_passport', id = passport.id) }}"><i class="bi bi-eye-fill" style="color: rgb(226, 226, 97)"></i></a></td>
+        <td class="text-center"><form action="{{ url_for('dashboard.confirm_passport', id = passport.id) }}" method="post"><button class="btn-icon" style="color: rgb(27, 160, 0)" type="submit"><i class="bi bi-shield-fill-check"></i></form></td>
+        <td class="text-center"><form action="{{ url_for('dashboard.decline_passport', id = passport.id) }}" method="post"><button class="btn-icon" style="color: red" type="submit"><i class="bi bi-shield-slash-fill"></i></form></td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

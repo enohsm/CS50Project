@@ -9,7 +9,7 @@
     <div class="panel text-center" style="margin-top:30px">
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-sm-offset-2">
-                <a class="events-disabled" href="#">
+                <a class="events-disabled" href="{{ url_for('dashboard.passport_confirmation') }}">
                     <div class="panel panel-default" style="padding:30px">
                         <h2 style="font-size:60px">{{ passports.count }}</h2>
                         <h4 class="text-muted">Passports Pending Approval</h4>
