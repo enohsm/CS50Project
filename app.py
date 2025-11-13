@@ -1,4 +1,5 @@
 from flask import Flask, session
+from datetime import datetime
 from routes.main_routes import mainbp
 from routes.request_routes import requestbp
 from routes.profile_routes import profilebp
@@ -21,6 +22,14 @@ def logged_in():
         user__name = session.get("name"),
         user__role = session.get("role")
         )
+
+@app.template_filter('format_date')
+def format_date(date):
+    return datetime.strptime(date, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y - %H:%M:%S')
+
+@app.template_filter('input_date')
+def input_date(date):
+    return datetime.strptime(date, '%d/%m/%Y').strftime('%Y-%m-%d')
 
 
 # EN: Registering blueprints for the routes

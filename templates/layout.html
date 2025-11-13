@@ -15,6 +15,21 @@
         {% if logged_in %}
         <div class="sidebar">
             <ul>
+                {% if user__role > 0 %}
+                <a href="{{ url_for('dashboard.employee_db') }}">
+                    <li>
+                        <i class="bi bi-columns-gap"></i>
+                        <span class="menu-text">Employee Dashboard</span>
+                    </li>
+                </a>
+                {% elif user__role > 1 %}
+                <a href="#">
+                    <li>
+                        <i class="bi bi-columns-gap"></i>
+                        <span class="menu-text">Admin Dashboard</span>
+                    </li>
+                </a>
+                {% endif %}
                 <a href="/me">
                     <li>
                         <i class="bi bi-person-fill"></i>

@@ -18,7 +18,7 @@
         <th>Identification No.</th>
         <th class="text-center">View</th>
         <th class="text-center">Confirm</th>
-        <th class="text-center">Decline</th>
+        <th class="text-center">Cancel</th>
         
     </tr>
     {% if passports %}
@@ -32,9 +32,9 @@
         <td>{{ passport.birth }}</td>
         <td>{{ passport.pass_exp }}</td>
         <td>{{ passport.ident_no }}</td>
-        <td class="text-center"><a href="{{ url_for('profile.view_passport', id = passport.id) }}"><i class="bi bi-eye-fill" style="color: rgb(226, 226, 97)"></i></a></td>
+        <td class="text-center"><a href="#" onclick="window.open('/me/passports/view?id={{ passport.id }}', '_blank', 'width=600, height=600'); return false"><i class="bi bi-eye-fill" style="color: rgb(226, 226, 97)"></i></a></td>
         <td class="text-center"><form action="{{ url_for('dashboard.confirm_passport', id = passport.id) }}" method="post"><button class="btn-icon" style="color: rgb(27, 160, 0)" type="submit"><i class="bi bi-shield-fill-check"></i></form></td>
-        <td class="text-center"><form action="{{ url_for('dashboard.decline_passport', id = passport.id) }}" method="post"><button class="btn-icon" style="color: red" type="submit"><i class="bi bi-shield-slash-fill"></i></form></td>
+        <td class="text-center"><form action="{{ url_for('dashboard.cancel_passport', id = passport.id) }}" method="post"><button class="btn-icon" style="color: red" type="submit"><i class="bi bi-shield-slash-fill"></i></form></td>
     </tr>
     {% endfor %}
     {% else %}

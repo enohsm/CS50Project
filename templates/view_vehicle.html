@@ -1,11 +1,6 @@
-{% extends 'layout.html' %}
-
-{% block title %}
-    View Vehicle
-{% endblock %}
-
-{% block main %}
-<div class="panel panel-default text-center">
-    <img src="{{ url_for('static', filename='vehicle/' + vehicle) }}" style="max-width: 800px; max-height: 800px">
-</div>
-{% endblock %}
+<head>
+    <title>Xahar's System: View Vehicle</title>
+</head>
+<body class="text-center" style="background: rgb(20, 20, 20); height: 100vh; display: flex; align-items: center; justify-content: center">
+    <img src="{{ url_for('static', filename='vehicles/' + vehicle) }}" style="max-width: 800px; max-height: 800px">
+</body>

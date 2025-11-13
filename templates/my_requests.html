@@ -77,10 +77,12 @@
                 15 Days
                 {% endif %}
             </td>
-            <td style="color:{% if requ.stat == 0 %}orange{% elif requ.stat == 1 %}green{% endif %}"><b>
+            <td style="color:{% if requ.stat == 0 %}orange{% elif requ.stat == 1 %}blue{% elif requ.stat == 2 %}green{% endif %}"><b>
                 {% if requ.stat == 0 %}
-                Green card insurance is being prepared...
+                Pending confirmation for insurance...
                 {% elif requ.stat == 1 %}
+                Green card insurance is being prepared...
+                {% elif requ.stat == 2 %}
                 Green card insurance has been prepared.
                 {% endif %}
             </b></td>
