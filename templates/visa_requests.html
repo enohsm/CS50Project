@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Pending Visa Requests
+{% endblock %}
+
+{% block main %}
+<h1>Pending Visa Requests</h1>
+<table class="table">
+    <tr>
+        <th>Country</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Passport No.</th>
+        <th>Sex</th>
+        <th>App. Type</th>
+        <th>Date of Expiry</th>
+        <th>Pref. App. Date</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th>Payment</th>
+        <th>Actions</th>
+    </tr>
+    {% if visas %}
+    {% for visa in visas %}
+    <tr>
+        <td style="color:blue"><b>{{ visa.country }}</b></td>
+        <td style="color:">{{ visa.name }}</td>
+        <td>{{ visa.surname }}</td>
+        <td>{{ visa.pass_no }}</td>
+        <td>{{ visa.sex }}</td>
+        <td style="color:rgb(80, 0, 185)"><b>{{ visa.visa_type }}</b></td>
+        <td>{{ visa.pass_exp }}</td>
+        <td>{{ visa.pref_date }}</td>
+        <td style="color:{% if visa.stat == 0 %}rgb(133, 124, 0){% elif visa.stat == 1 %}orange{% elif visa.stat == 2 %}blue{% elif visa.stat == 3 %}green{% endif %}"><b>
+            {% if visa.stat == 0 %}
+            Waiting for appointment confirmation...
+            {% elif visa.stat == 1 %}
+            Appointment confirmed.
+            {% elif visa.stat == 2 %}
+            Awaiting result...
+            {% elif visa.stat == 3 %}
+            Application completed.
+            {% endif %}
+        </b></td>
+        <td>{{ visa.request_date | format_date }}</td>
+        <td style="color:{% if visa.payment == 0 %}red{% elif visa.payment == 1 %}green{% endif %}"><b>
+            {% if visa.payment == 0 %}
+            Unpaid
+            {% elif visa.payment == 1 %}
+            Paid
+            {% endif %}
+        </b></td>
+        <td><div class="dropdown">
+            <button class="btn btn-primary" type="button" data-toggle="dropdown"><i class="bi bi-list"></i>
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="{{ url_for('dashboard.confirm_date', id = visa.id) }}"><i class="bi bi-calendar2-check" style="color:green;margin-right:10px"></i><b>Confirm the Date</b></a></li>
+                <li><a href="#"><i class="bi bi-slash-circle" style="color:red;margin-right:10px"></i>Cancel Request</a></li>
+            </ul>
+        </div></td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>Actions without Options</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

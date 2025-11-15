@@ -29,10 +29,10 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-5 col-sm-offset-1">
-                <a class="events-disabled" href="#">
+                <a class="events-disabled" href="{{ url_for('dashboard.pending_visas') }}">
                     <div class="panel panel-default" style="padding:30px">
-                        <h2 style="font-size:60px">{{ confirmed_visa.count }}</h2>
-                        <h4 class="text-muted">Visa Requests with Approved Appointments</h4>
+                        <h2 style="font-size:60px">{{waiting_visa.count}}</h2>
+                        <h4 class="text-muted">Visa Requests Awaiting Appointment</h4>
                     </div>
                 </a>
             </div>
@@ -40,8 +40,8 @@
             <div class="col-xs-12 col-sm-5">
                 <a class="events-disabled" href="#">
                     <div class="panel panel-default" style="padding:30px">
-                        <h2 style="font-size:60px">{{waiting_visa.count}}</h2>
-                        <h4 class="text-muted">Visa Requests Awaiting Appointment</h4>
+                        <h2 style="font-size:60px">{{ confirmed_visa.count }}</h2>
+                        <h4 class="text-muted">Visa Requests with Approved Appointments</h4>
                     </div>
                 </a>
             </div>

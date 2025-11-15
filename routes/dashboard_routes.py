@@ -156,3 +156,46 @@ def cancel_gc_request():
             return x.apology('An error occurred. Please try again.', 'dashboard.pending_greencards')
     else:
         return redirect(url_for('dashboard.pending_greencards'))
+    
+
+@dbbp.route('/visa_requests')
+@x.login_required('employee')
+def pending_visas():
+    visas = DataBase.execute(x.file_query('pending_visa_requests.sql'))
+
+    return render_template('visa_requests.html', visas = visas)
+
+
+@dbbp.route('visa_requests/confirm_date', methods=['GET', 'POST'])
+@x.login_required('employee')
+def confirm_date():
+    if request.method == 'POST':
+        request_id = request.form.get('request_id')
+        if not request_id or not request_id.isdigit():
+            return redirect('dashboard.pending_visas')
+        
+        visa = DataBase.execute(x.file_query('pending_visa_request.sql'), request_id)
+        if not visa or len(visa) != 1:
+            return x.apology('The request could not found or appointment date already confirmed.', 'dashboard.pending_visas')
+        
+        confirmed_date = request.form.get('confirmed_date')
+        if not confirmed_date or not x.valid_date(confirmed_date):
+            return x.apology('Appointment date is invalid.', 'dashboard.pending_visas')
+
+        try:
+            DataBase.execute('UPDATE visa_requests SET status = 1, appointment_date = ? WHERE id = ? AND status = 0', x.valid_date(confirmed_date), request_id)
+            return x.apology('The appointment date of the request has been successfully confirmed.', 'dashboard.pending_visas')
+        
+        except ValueError:
+            return x.apology('An error occurred, please try again.', 'dashboard.pending_visas')
+        
+    else:
+        requ_id = request.args.get('id')
+        if not requ_id or not requ_id.isdigit():
+            return redirect(url_for('dashboard.pending_visas'))
+
+        visa_data = DataBase.execute(x.file_query('pending_visa_request.sql'), requ_id)
+        if not visa_data or len(visa_data) != 1:
+            return x.apology('The request could not found or appointment date already confirmed.', 'dashboard.pending_visas')
+
+        return render_template('date_confirmation.html', visa = visa_data[0])

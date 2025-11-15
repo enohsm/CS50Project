@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Date Confirmation
+{% endblock %}
+
+{% block main %}
+<h1>Confirmation of Appointment Date</h1>
+<form class="form-horizontal" action="{{ url_for('dashboard.confirm_date') }}" method="post">
+    <input type="hidden" name="request_id" value="{{ visa.id }}">
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="country">Country:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="country" value="{{ visa.country }}" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="name">Name & Surname:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="name" value="{{ visa.name }} {{ visa.surname }}" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="pass_no">Passport No:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="pass_no" value="{{ visa.pass_no }}" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="request_date">Request Date:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="request_date" value="{{ visa.request_date | format_date }}" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="confirmed_date">Confirmed App. Date:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="confirmed_date" name="confirmed_date" placeholder="Confirmed App. Date" type="date" required>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-success btn-lg" type="submit">Confirm Date</button>
+    </div>
+</form>
+{% endblock %}

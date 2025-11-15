@@ -30,16 +30,18 @@
         <td>{{ requ.app_type }}</td>
         <td>{{ requ.pref_app_date }}</td>
         <td>{{ requ.request_date }}</td>
-        <td style="color:{% if requ.stat == 0 %}orange{% elif requ.stat == 1 %}blue{% else %}green{% endif %}"><b>
+        <td style="color:{% if requ.stat == 0 %}yellow{% elif requ.stat == 1 %}orange{% elif requ.stat == 2 %}blue{% elif requ.stat == 3 %}green{% endif %}"><b>
             {% if requ.stat == 0 %}
             Waiting for appointment confirmation...
             {% elif requ.stat == 1 %}
-            Appointment confirmed.
+            Appointment confirmed...
+            {% elif requ.stat == 2 %}
+            Awaiting result...
             {% else %}
             Application completed.
             {% endif %}
         </b></td>
-        <td>{{ requ.app_date }}</td>
+        <td {% if requ.app_date %}style="color:blue"{% endif %}><b>{{ requ.app_date }}</b></td>
         <td>{{ requ.result_date }}</td>
         {% if requ.stat == 0 %}
         <td class="text-center"><a href="{{ url_for('request.modify_visa_request', id = requ.id) }}"><i class="bi bi-pencil-fill" style="color: cyan"></i></a>
