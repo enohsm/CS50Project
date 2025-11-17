@@ -51,14 +51,27 @@
             Paid
             {% endif %}
         </b></td>
-        <td><div class="dropdown">
-            <button class="btn btn-primary" type="button" data-toggle="dropdown"><i class="bi bi-list"></i>
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="{{ url_for('dashboard.confirm_date', id = visa.id) }}"><i class="bi bi-calendar2-check" style="color:green;margin-right:10px"></i><b>Confirm the Date</b></a></li>
-                <li><a href="#"><i class="bi bi-slash-circle" style="color:red;margin-right:10px"></i>Cancel Request</a></li>
-            </ul>
-        </div></td>
+        <td>   
+            <div class="dropdown">
+                <button class="btn" type="button" data-toggle="dropdown"><i class="bi bi-list"></i>
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    {% if visa.payment == 0 %}
+                    <li><form action="{{ url_for('dashboard.set_paid') }}" method="post" style="margin:0"><input type="hidden" name="id" value="{{ visa.id }}"><button class="btn-icon fake-a" type="submit"><i class="bi bi-cart-check-fill" style="color:green;margin-right:10px"></i><b>Set as Paid</b></button></form></li>
+                    {% elif visa.payment == 1 %}
+                    <li><a href="{{ url_for('dashboard.confirm_date', id = visa.id) }}"><i class="bi bi-calendar2-check-fill" style="color:green;margin-right:10px"></i><b>Confirm the Date</b></a></li>
+                    {% endif %}
+                    <li>
+                        <form action="{{ url_for('dashboard.cancel_visa_request') }}" method="post" style="margin:0">
+                            <input type="hidden" name="id" value="{{ visa.id }}">
+                            <button class="btn-icon fake-a" type="submit">
+                                <i class="bi bi-slash-circle" style="color:red;margin-right:10px"></i><b>Cancel Request</b>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </td>
     </tr>
     {% endfor %}
     {% else %}
@@ -73,7 +86,11 @@
         <td>NO DATA</td>
         <td>NO DATA</td>
         <td>NO DATA</td>
-        <td>Actions without Options</td>
+        <td>NO DATA</td>
+        <td><div class="dropdown">
+                <button class="btn" type="button"><i class="bi bi-list"></i>
+                <span class="caret"></span></button>
+            </div></td>
     </tr>
     {% endif %}
 </table>

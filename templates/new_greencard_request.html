@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 
+{% block javascript2 %}
+<script src="{{ url_for('static', filename='start_date.js') }}"></script>
+{% endblock %}
+
 {% block title %}
     New Greencard Request
 {% endblock %}

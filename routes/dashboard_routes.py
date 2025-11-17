@@ -166,7 +166,7 @@ def pending_visas():
     return render_template('visa_requests.html', visas = visas)
 
 
-@dbbp.route('visa_requests/confirm_date', methods=['GET', 'POST'])
+@dbbp.route('/visa_requests/confirm_date', methods=['GET', 'POST'])
 @x.login_required('employee')
 def confirm_date():
     if request.method == 'POST':
@@ -174,9 +174,9 @@ def confirm_date():
         if not request_id or not request_id.isdigit():
             return redirect('dashboard.pending_visas')
         
-        visa = DataBase.execute(x.file_query('pending_visa_request.sql'), request_id)
+        visa = DataBase.execute(x.file_query('pending_visa_request_paid.sql'), request_id)
         if not visa or len(visa) != 1:
-            return x.apology('The request could not found or appointment date already confirmed.', 'dashboard.pending_visas')
+            return x.apology('The request could not found or appointment date already confirmed or not paid.', 'dashboard.pending_visas')
         
         confirmed_date = request.form.get('confirmed_date')
         if not confirmed_date or not x.valid_date(confirmed_date):
@@ -199,3 +199,57 @@ def confirm_date():
             return x.apology('The request could not found or appointment date already confirmed.', 'dashboard.pending_visas')
 
         return render_template('date_confirmation.html', visa = visa_data[0])
+    
+
+@dbbp.route('/visa_requests/set_paid', methods = ['GET', 'POST'])
+@x.login_required('employee')
+def set_paid():
+    if request.method == 'POST':
+        request_id = request.form.get('id')
+        if not request_id or not request_id.isdigit():
+            return redirect(url_for('dashboard.pending_visas'))
+        
+        request_data = DataBase.execute(x.file_query('pending_visa_request_unpaid.sql'), request_id)
+        if not request_data or len(request_data) != 1:
+            return x.apology('The request could not found or already paid.', 'dashboard.pending_visas')
+        
+        try:
+            DataBase.execute('UPDATE visa_requests SET payment_status = 1 WHERE id = ? AND status = 0 AND payment_status = 0', request_id)
+            return x.apology('The payment status of the request has been successfully updated to "Paid"', 'dashboard.pending_visas')
+        
+        except ValueError:
+            return x.apology('An error occurred, please try again.', 'dashboard.pending_visas')
+
+    else:
+        return render_template('visa_requests.html')
+    
+
+@dbbp.route('/visa_requests/cancel', methods=['GET', 'POST'])
+@x.login_required('employee')
+def cancel_visa_request():
+    if request.method == 'POST':
+        request_id = request.form.get('id')
+        if not request_id or not request_id.isdigit():
+            return redirect(url_for('dashboard.pending_visas'))
+        
+        request_data = DataBase.execute('SELECT id FROM visa_requests WHERE id = ? AND status = 0', request_id)
+        if not request_data or len(request_data) != 1:
+            return x.apology("This request is already confirmed or cancelled.", 'dashboard.pending_visas')
+        
+        try:
+            DataBase.execute('DELETE FROM visa_requests WHERE id = ? AND status = 0', request_id)
+            return x.apology('The request has been successfully cancelled.', 'dashboard.pending_visas')
+        
+        except ValueError:
+            return x.apology('An error occurred, please try again.', 'dashboard.pending_visas')
+    
+    else:
+        return redirect(url_for('dashboard.pending_visas'))
+    
+
+@dbbp.route('/approved_visas')
+@x.login_required('employee')
+def approved_visas():
+    pass
+
+

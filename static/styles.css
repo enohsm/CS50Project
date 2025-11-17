@@ -16,12 +16,12 @@ footer {
     margin-bottom: 35px;
 }
 
-button.btn {
-    margin-top: 25px;
-}
-
 .navbar-inverse {
     background: #131313;
+}
+
+.btn-info {
+    margin-top: 25px;
 }
 
 .navbar {
@@ -161,4 +161,24 @@ main {
 
 .view-button:hover {
     cursor: pointer;
+}
+
+
+.fake-a {
+    width: 100%;
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333;
+    white-space: nowrap;
+    text-align:left;
+}
+
+
+.fake-a:hover {
+    color: #262626;
+    background-color: #f5f5f5;
+    text-decoration: none;
 }
