@@ -30,14 +30,14 @@
         <td>{{ requ.app_type }}</td>
         <td>{{ requ.pref_app_date }}</td>
         <td>{{ requ.request_date }}</td>
-        <td style="color:{% if requ.stat == 0 %}yellow{% elif requ.stat == 1 %}orange{% elif requ.stat == 2 %}blue{% elif requ.stat == 3 %}green{% endif %}"><b>
+        <td style="color:{% if requ.stat == 0 %}grey{% elif requ.stat == 1 %}orange{% elif requ.stat == 2 %}blue{% elif requ.stat == 3 %}green{% endif %}"><b>
             {% if requ.stat == 0 %}
             Waiting for appointment confirmation...
             {% elif requ.stat == 1 %}
             Appointment confirmed...
             {% elif requ.stat == 2 %}
             Awaiting result...
-            {% else %}
+            {% elif requ.stat == 3 %}
             Application completed.
             {% endif %}
         </b></td>

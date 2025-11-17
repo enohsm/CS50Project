@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Track the Visa Requests
+{% endblock %}
+
+{% block main %}
+<h1>Tracking of Visa Requests</h1>
+<table class="table">
+    <tr>
+        <th>Country</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Passport No.</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th>Appointment Date</th>
+        <th>Reference No.</th>
+        <th class="text-center">Set Resulted</th>
+    </tr>
+    {% if visas %}
+    {% for visa in visas %}
+    <tr>
+        <td style="color:blue"><b>{{ visa.country }}</b></td>
+        <td style="color:">{{ visa.name }}</td>
+        <td>{{ visa.surname }}</td>
+        <td>{{ visa.pass_no }}</td>
+        <td style="color:{% if visa.stat == 0 %}rgb(133, 124, 0){% elif visa.stat == 1 %}orange{% elif visa.stat == 2 %}blue{% elif visa.stat == 3 %}green{% endif %}"><b>
+            {% if visa.stat == 0 %}
+            Waiting for appointment confirmation...
+            {% elif visa.stat == 1 %}
+            Appointment confirmed.
+            {% elif visa.stat == 2 %}
+            Awaiting result...
+            {% elif visa.stat == 3 %}
+            Application completed.
+            {% endif %}
+        </b></td>
+        <td>{{ visa.request_date | format_date }}</td>
+        <td>{{ visa.app_date }}</td>
+        <td style="color:red"><b>{{ visa.ref_no }}</b></td>
+        <td class="text-center">
+            <form action="{{ url_for('dashboard.visa_tracking') }}" method="post">
+                <input type="hidden" name="id" value="{{ visa.id }}" required>
+                <button type="submit"><b><i class="bi bi-hand-thumbs-up-fill" style="color:green"></i></b></button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

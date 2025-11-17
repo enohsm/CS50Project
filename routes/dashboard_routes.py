@@ -15,11 +15,14 @@ def employee_db():
 
     count_awaiting_gc_requests = DataBase.execute('SELECT COUNT(*) AS count FROM gc_requests WHERE status = 0')
 
+    count_applicated_visa_requests = DataBase.execute('SELECT COUNT(*) AS count FROM visa_requests WHERE status = 2')
+    print(count_applicated_visa_requests)
     return render_template('employee_dashboard.html',
                            passports = count_unconfirmed_passports[0],
                            waiting_visa = count_awaiting_visa_requests[0],
                            confirmed_visa = count_confirmed_visa_appointment[0],
-                           waiting_gc = count_awaiting_gc_requests[0])
+                           waiting_gc = count_awaiting_gc_requests[0],
+                           applicated_visa = count_applicated_visa_requests[0])
 
 
 @dbbp.route('/confirmation')
@@ -247,9 +250,70 @@ def cancel_visa_request():
         return redirect(url_for('dashboard.pending_visas'))
     
 
-@dbbp.route('/approved_visas')
+@dbbp.route('/visa_requests/approved_visas')
 @x.login_required('employee')
 def approved_visas():
-    pass
+    approved = DataBase.execute(x.file_query('approved_visa_requests.sql'))
+    
+    return render_template('approved_visa_requests.html', visas = approved)
 
 
+@dbbp.route('/visa_requests/approved_visas/visa_applicated', methods=['GET', 'POST'])
+@x.login_required('employee')
+def visa_applicated():
+    if request.method == 'POST':
+        request_id = request.form.get('id')
+        if not request_id or not request_id.isdigit():
+            return redirect(url_for('dashboard.approved_visas'))
+        
+        visa_data = DataBase.execute(x.file_query('approved_visa_request.sql'), request_id)
+        if not visa_data or len(visa_data) != 1:
+            return x.apology('The request could not found or already applicated.', 'dashboard.approved_visas')
+        
+        ref_no = request.form.get('ref_no')
+        if not ref_no or len(ref_no) > 40:
+            return x.apology('Invalid reference number.', 'dashboard.visa_applicated', id = request_id)
+
+        try:
+            DataBase.execute('UPDATE visa_requests SET status = 2 WHERE id = ? AND status = 1', request_id)
+            DataBase.execute('INSERT INTO app_references (pass_id, request_id, reference_no) VALUES(?, ?, ?)', visa_data[0]['pass_id'], request_id, ref_no.upper())
+            return x.apology('Request has been successfully updated to "Appliacted."', 'dashboard.approved_visas')
+        
+        except ValueError:
+            return x.apology('An error occurred, please try again.', 'dashboard.visa_applicated', id = request_id)
+    
+    else:
+        requ_id = request.args.get('id')
+        if not requ_id or not requ_id.isdigit():
+            return redirect(url_for('dashboard.approved_visas'))
+        
+        visa = DataBase.execute(x.file_query('approved_visa_request.sql'), requ_id)
+        if not visa or len(visa) != 1:
+            return x.apology('The request could not found or already applicated.', 'dashboard.approved_visas')
+
+        return render_template('visa_applicated.html', visa = visa[0])
+
+
+@dbbp.route('/visa_requests/approved_visas/track_request' , methods = ['GET', 'POST'])
+@x.login_required('employee')
+def visa_tracking():
+    if request.method == 'POST':
+        req_id = request.form.get('id')
+        if not req_id or not req_id.isdigit():
+            return redirect(url_for('dashboard.visa_tracking'))
+        
+        req_data = DataBase.execute(x.file_query('applicated_visa_request.sql'), req_id)
+        if not req_data or len(req_data) != 1:
+            return x.apology('Application could not found or already resulted.', 'dashboard.visa_tracking')
+        
+        try:
+            DataBase.execute('UPDATE visa_requests SET status = 3 WHERE id = ? AND status = 2', req_id)
+            return x.apology('Application has been successfully resulted.', 'dashboard.visa_tracking')
+        
+        except ValueError:
+            return x.apology('An error occurred, please try again.', 'dashboard.visa_tracking')
+
+    else:
+        visas = DataBase.execute(x.file_query('applicated_visa_requests.sql'))
+
+        return render_template('tracking_visa.html', visas = visas)

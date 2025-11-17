@@ -170,7 +170,7 @@ def modify_vehicle():
 
         is_exist_active_req = DataBase.execute('SELECT id FROM gc_requests WHERE vehicle_id = ? AND user_id = ?', vehicle[0]['id'], session['user_id'])
         if is_exist_active_req or len(is_exist_active_req) > 0:
-            return x.apology('There is an active request for this vehicle.', 'profile.vehicles')
+            return x.apology('There is request(s) for this vehicle. You can delete this vehicle and add again this one.', 'profile.vehicles')
 
         return render_template("modify_vehicle.html", vehicle=vehicle[0])
 
@@ -187,7 +187,7 @@ def delete_vehicle():
         if not vehicle_data or not len(vehicle_data) == 1:
             return x.apology('Unauthorized access.', 'profile.vehicles')
         
-        is_exist_active_req = DataBase.execute('SELECT id FROM gc_requests WHERE vehicle_id = ? AND user_id = ?', vehicle_data[0]['id'], session['user_id'])
+        is_exist_active_req = DataBase.execute('SELECT id FROM gc_requests WHERE vehicle_id = ? AND user_id = ? AND status != 2', vehicle_data[0]['id'], session['user_id'])
         if is_exist_active_req or len(is_exist_active_req) > 0:
             return x.apology('There is an active request for this vehicle.', 'profile.vehicles')
         
@@ -200,6 +200,7 @@ def delete_vehicle():
             return x.apology('Invalid password.', 'profile.delete_vehicle', id = vehicle_id)
         
         try:
+            DataBase.execute('DELETE FROM gc_requests WHERE vehicle_id = ? AND user_id = ?', vehicle_id, session['user_id'])
             DataBase.execute('DELETE FROM vehicles WHERE id = ? AND user_id = ?', vehicle_id, session['user_id'])
             if os.path.exists(f'static/vehicles/{vehicle_data[0]['img']}'):
                 os.remove(f'static/vehicles/{vehicle_data[0]['img']}')
@@ -217,7 +218,7 @@ def delete_vehicle():
         if not vehicle_data or not len(vehicle_data) == 1:
             return x.apology('Unauthorized access.', 'profile.vehicles')
         
-        is_exist_active_req = DataBase.execute('SELECT id FROM gc_requests WHERE vehicle_id = ? AND user_id = ?', vehicle_data[0]['id'], session['user_id'])
+        is_exist_active_req = DataBase.execute('SELECT id FROM gc_requests WHERE vehicle_id = ? AND user_id = ? AND status != 2', vehicle_data[0]['id'], session['user_id'])
         if is_exist_active_req or len(is_exist_active_req) > 0:
             return x.apology('There is an active request for this vehicle.', 'profile.vehicles')
         
@@ -390,6 +391,8 @@ def delete_passport():
             return x.apology('Invalid password.', 'profile.delete_passport', id = passport_id)
             
         try:
+            DataBase.execute('DELETE FROM app_references WHERE pass_id = ?', passport[0]['id'])
+            DataBase.execute('DELETE FROM visa_requests WHERE pass_id = ? AND user_id = ?', passport[0]['id'], session['user_id'])
             DataBase.execute('DELETE FROM passports WHERE id = ? AND user_id = ?', passport[0]['id'], session['user_id'])
             if os.path.exists(f'static/passports/{passport[0]['img']}'):
                 os.remove(f'static/passports/{passport[0]['img']}')

@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 
+{% block javascript2 %}
+<script src="{{ url_for('static', filename='earliestdate.js') }}"></script>
+{% endblock %}
+
 {% block title %}
     Modify Visa Request
 {% endblock %}

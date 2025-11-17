@@ -287,7 +287,7 @@ def modify_gc_request():
         
         gc_request = DataBase.execute(x.file_query('active_gc_requests.sql'), request_id, session['user_id'])
         if not gc_request or len(gc_request) != 1:
-            return x.apology('Unauthorized access or request is not active.', 'request.gc_requests')
+            return x.apology('Unauthorized access or request status is not "Pending".', 'request.gc_requests')
         
         start_date = request.form.get('start_date')
         if not start_date or not x.valid_startdate(start_date):
@@ -331,7 +331,7 @@ def cancellation_gc_request():
         
         greencard = DataBase.execute(x.file_query('active_gc_requests.sql'), request_id, session['user_id'])
         if not greencard or len(greencard) != 1:
-            return x.apology('Unauthorized acces or request is not active.', 'request.gc_requests')
+            return x.apology('Unauthorized acces or request status is not "Pending".', 'request.gc_requests')
         
         user_data = DataBase.execute('SELECT password FROM users WHERE id = ?', session['user_id'])
         if not user_data or len(user_data) != 1:

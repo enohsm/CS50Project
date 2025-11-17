@@ -7,7 +7,7 @@
 {% block main %}
 <form class="form-horizontal" action="{{ url_for('profile.delete_vehicle', id = vehicle_id) }}" method="POST">
     <h1>Delete Vehicle</h1>
-    <p>Do you confirm to delete the vehicle with plate: <b>{{ plate }}</b></p>
+    <p class="text-center">The vehicle with plate number <b>{{ plate }}</b> and all past green insurance requests associated with this vehicle will be deleted. Do you confirm?</p>
     <div class="form-group">
         <label class="control-label col-sm-5">Enter your password:</label>
         <div class="col-sm-2">
