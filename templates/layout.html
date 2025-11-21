@@ -15,18 +15,19 @@
         {% if logged_in %}
         <div class="sidebar">
             <ul>
+                {% if user__role > 1 %}
+                <a href="{{ url_for('admin.admin_db') }}">
+                    <li>
+                        <i class="bi bi-incognito"></i>
+                        <span class="menu-text">Admin Dashboard</span>
+                    </li>
+                </a>
+                {% endif %}
                 {% if user__role > 0 %}
                 <a href="{{ url_for('dashboard.employee_db') }}">
                     <li>
                         <i class="bi bi-columns-gap"></i>
                         <span class="menu-text">Employee Dashboard</span>
-                    </li>
-                </a>
-                {% elif user__role > 1 %}
-                <a href="#">
-                    <li>
-                        <i class="bi bi-columns-gap"></i>
-                        <span class="menu-text">Admin Dashboard</span>
                     </li>
                 </a>
                 {% endif %}
@@ -93,7 +94,7 @@
                             <li><a href="{{ url_for('dashboard.employee_db') }}">Employee Dashboard</a></li>
                             {% endif %}
                             {% if user__role > 1 %}
-                            <li><a href="#">Admin Dashboard</a></li>
+                            <li><a href="{{ url_for('admin.admin_db') }}">Admin Dashboard</a></li>
                             {% endif %}
                         </ul>
                         </li>

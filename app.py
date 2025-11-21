@@ -4,6 +4,7 @@ from routes.main_routes import mainbp
 from routes.request_routes import requestbp
 from routes.profile_routes import profilebp
 from routes.dashboard_routes import dbbp
+from routes.admin_db_routes import adminbp
 
 
 app = Flask(__name__)
@@ -38,6 +39,7 @@ app.register_blueprint(mainbp)
 app.register_blueprint(requestbp)
 app.register_blueprint(profilebp)
 app.register_blueprint(dbbp)
+app.register_blueprint(adminbp)
 
 
 if __name__ == "__main__":

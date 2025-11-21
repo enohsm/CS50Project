@@ -1,17 +1,22 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Title
+    Admin Dashboard
 {% endblock %}
 
 {% block main %}
-<!--
-- Hoşgeldin mesajı
-- Butonlar
---- Profilim
---- Kasa Durumu
---- Başvuru Talepleri
---- Yeşil Sigorta Oluştur
---- Evrak Düzenle
--->
+<div class="container">
+    <div class="panel text-center" style="margin-top:30px">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+                <a class="events-disabled" href="{{ url_for('admin.set_roles') }}">
+                    <div class="panel panel-default" style="padding:30px">
+                        <h1 style="font-size:60px"><i class="bi bi-person-fill-gear"></i></h2>
+                        <h4 class="text-muted">User Roles</h4>
+                    </div>
+                </a>
+            </div> 
+        </div>
+    </div>
+</div>
 {% endblock %}

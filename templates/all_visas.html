@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    All Visa App. Requests
+{% endblock %}
+
+{% block main %}
+<h1>All Visa App. Requests</h1>
+<table class="table">
+    {% if visa_count > 0 %}
+    <p class="text-center">You are listing <b>{{ visa_count }}</b> visa request(s).</p>
+    {% endif %}
+    <tr>
+        <th>Country</th>
+        <th>Username</th>
+        <th>Name & Surname</th>
+        <th>Passport No.</th>
+        <th>Visa Type</th>
+        <th>Pref. App. Date</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th>Payment</th>
+        <th>App. Date</th>
+        <th>Result Date</th>
+    </tr>
+    {% if visas %}
+    {% for visa in visas %}
+    <tr>
+        <td>{{ visa.country }}</td>
+        <td>{{ visa.username }}</td>
+        <td>{{ visa.name }} {{ visa.surname }}</td>
+        <td>{{ visa.pass_no }}</td>
+        <td>{{ visa.visa_type }}</td>
+        <td>{{ visa.pref_date }}</td>
+        <td style="color:{% if visa.stat == 0 %}grey{% elif visa.stat == 1 %}orange{% elif visa.stat == 2 %}blue{% elif visa.stat == 3 %}green{% endif %}"><b>
+            {% if visa.stat == 0 %}
+            Waiting for appointment confirmation...
+            {% elif visa.stat == 1 %}
+            Appointment confirmed...
+            {% elif visa.stat == 2 %}
+            Awaiting result...
+            {% elif visa.stat == 3 %}
+            Application completed.
+            {% endif %}
+        </b></td>
+        <td>{{ visa.request_date | format_date }}</td>
+        <td style="color:{% if visa.payment == 0 %}red{% elif visa.payment == 1 %}green{% endif %}"><b>
+            {% if visa.payment == 0 %}
+            Unpaid
+            {% elif visa.payment == 1 %}
+            Paid
+            {% endif %}
+        </b></td>
+        <td>{{ visa.app_date }}</td>
+        <td>{{ visa.result_date }}</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

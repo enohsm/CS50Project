@@ -7,6 +7,8 @@ dbbp = Blueprint("dashboard", __name__, url_prefix="/dashboard")
 @dbbp.route('/')
 @x.login_required('employee')
 def employee_db():
+    count_all_visa_requests = DataBase.execute('SELECT COUNT(*) AS count FROM visa_requests')
+
     count_unconfirmed_passports = DataBase.execute('SELECT COUNT(*) AS count FROM passports WHERE confirmed != 1')
     
     count_awaiting_visa_requests = DataBase.execute('SELECT COUNT(*) AS count FROM visa_requests WHERE status = 0')
@@ -16,8 +18,9 @@ def employee_db():
     count_awaiting_gc_requests = DataBase.execute('SELECT COUNT(*) AS count FROM gc_requests WHERE status = 0')
 
     count_applicated_visa_requests = DataBase.execute('SELECT COUNT(*) AS count FROM visa_requests WHERE status = 2')
-    print(count_applicated_visa_requests)
+
     return render_template('employee_dashboard.html',
+                           visas_all = count_all_visa_requests[0], 
                            passports = count_unconfirmed_passports[0],
                            waiting_visa = count_awaiting_visa_requests[0],
                            confirmed_visa = count_confirmed_visa_appointment[0],
@@ -160,6 +163,14 @@ def cancel_gc_request():
     else:
         return redirect(url_for('dashboard.pending_greencards'))
     
+
+@dbbp.route('/visa_requests_all')
+@x.login_required
+def all_visas():
+    visas = DataBase.execute(x.file_query('all_visa_requests.sql'))
+    
+    return render_template('all_visas.html', visas = visas, visa_count = len(visas))
+
 
 @dbbp.route('/visa_requests')
 @x.login_required('employee')
@@ -307,7 +318,7 @@ def visa_tracking():
             return x.apology('Application could not found or already resulted.', 'dashboard.visa_tracking')
         
         try:
-            DataBase.execute('UPDATE visa_requests SET status = 3 WHERE id = ? AND status = 2', req_id)
+            DataBase.execute('UPDATE visa_requests SET status = 3, result_date = ? WHERE id = ? AND status = 2', datetime.today().date().strftime('%d/%m/%Y'), req_id)
             return x.apology('Application has been successfully resulted.', 'dashboard.visa_tracking')
         
         except ValueError:

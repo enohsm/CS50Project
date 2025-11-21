@@ -1,15 +1,7 @@
 Parola kontrolünü JavaScript ile yap daha iyi gözüksün.
-Pasaport tablosuna cinsiyet ekle.
-SQL Tablasına giriş yapmak, silmek için fonksiyonlar yaz.
 Readme dosyasına kayıt işlemindeki race conditionu anlat.
-Kayıt oluşturulurken, isim soyismin baş harfleri büyük olsun (pythonda ayarla)
-Pasaport kaydederken isim soyisim büyük harflerle olacak.
 Çalışanların yaptığı işlemleri tut.
 Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrolünü databaseden sorguyla kontrol ettiğini anlat.
-Role sistemini ve login required fonksiyonunu güncelle.
-Tüm kodları (kendi kod tekrarlarım da dahil olmak üzere) kopyala-yapıştır olmadan kendim yazdığım için bazı kod tekrarlarında farklılıklar ya da benzer mantıklarda farklı çözümler olabilir.
 Delete_vehicle ve delete_passport fonksiyonlarını, html'lerini kontrol et. Dene, test et.
-Mobil cihaz uyumlu yap.
-Pasaport düzenleme sistemini düzenle: pasaport onaylama sistemi: kullanıcı pasaport ekleyecek, onaylanana kadar modify yapabilecek. Onaylandıktan sonra modify yapamayacak. Onay çalışanın sistemine düşecek.
 
 Sıradaki: 

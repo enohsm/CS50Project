@@ -59,8 +59,8 @@ def new_visa_request():
         if not country or not x.valid_country(country):
             return x.apology('Invalid country.', 'request.new_visa_request')
         
-        # Bu kullanıcının bu ülkeye halihazırda mevcut başvurusu var mı kontrol et (status = 2 / Sonuçlanmış başvuru /)
-        is_exist_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND country = ? AND status != ?', session['user_id'], country, '2')
+        # Bu kullanıcının bu ülkeye halihazırda mevcut başvurusu var mı kontrol et (status = 3 / Sonuçlanmış başvuru /)
+        is_exist_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND country = ? AND status != 3', session['user_id'], country)
         if is_exist_request:
             return x.apology('There is already a pending request for this passport.', 'request.new_visa_request')
 
@@ -113,10 +113,11 @@ def modify_visa_request():
         if not country or not x.valid_country(country):
             return x.apology('Invalid country.', 'request.modify_visa_request', id = visa_request_id)
         
-        # Kullanıcının bu ülkeye aktif olan başka başvurusu var mı kontrol et
-        is_exist_country_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND id != ? AND country = ? AND status != ?', session['user_id'], visa_request_id, country, '2')
-        if is_exist_country_request:
-            return x.apology('You already have an active application for this country.', 'request.modify_visa_request', id = visa_request_id)
+        # Ülke değişmişse kullanıcının bu ülkeye aktif olan başka başvurusu var mı kontrol et
+        if country != visa_request[0]['country']:
+            is_exist_country_request = DataBase.execute('SELECT * FROM visa_requests WHERE user_id = ? AND id != ? AND country = ? AND status != ?', session['user_id'], visa_request_id, country, '2')
+            if is_exist_country_request:
+                return x.apology('You already have an active application for this country.', 'request.modify_visa_request', id = visa_request_id)
 
         # Tercih edilen tarihi formdan al
         pref_date = request.form.get('pref_date')
