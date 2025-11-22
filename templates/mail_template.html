@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ subject }}</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>Name & Surname</td>
+                <td>{{ request.name }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ request.address }}</td>
+            </tr>
+            <tr>
+                <td>Plate</td>
+                <td>{{ request.plate }}</td>
+            </tr>
+            <tr>
+                <td>VIN</td>
+                <td>{{ request.vin }}</td>
+            </tr>
+            <tr>
+                <td>Brand</td>
+                <td>{{ request.brand }}</td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td>{{ request.model }}</td>
+            </tr>
+            <tr>
+                <td>Color</td>
+                <td>{{ request.color }}</td>
+            </tr>
+            <tr>
+                <td>Start Date</td>
+                <td>{{ request.start_date }}</td>
+            </tr>
+            <tr>
+                <td>Policy Number</td>
+                <td>{{ request.policy_no }}</td>
+            </tr>
+            <tr>
+                <td>Coverage Period</td>
+                <td>{% if request.period == '15D' %}15 Days{% elif request.period == '1M' %}1 Month{% elif request.period == '3M' %}3 Months{% endif %}</td>
+            </tr>
+        </table>
+    </body>
+</html>

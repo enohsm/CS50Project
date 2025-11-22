@@ -82,6 +82,7 @@ def add_vehicle():
         try:
             filename = x.new_filename(vehicle_img.filename)
             DataBase.execute("INSERT INTO vehicles (user_id, namesurname, address, plate, vin, brand, model, color, img) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], name.upper(), (district.upper()+"/"+province.upper()), plate.upper(), vin.upper(), brand.upper(), type.upper(), color.upper(), filename)
+            os.makedirs(os.path.join('static', 'vehicles'), exist_ok=True)
             vehicle_img.save(os.path.join('static', 'vehicles', filename))
             flash("Your vehicle has successfully registered.")
             return redirect(url_for("profile.vehicles"))
@@ -278,8 +279,8 @@ def add_passport():
 
         try:
             filename = x.new_filename(pass_img.filename)
-            print(filename)
             DataBase.execute("INSERT INTO passports (user_id, name, surname, sex, birth, pass_no, pass_exp, ident_no, img) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", user['id'], user['name'].upper(), user['surname'].upper(), user['sex'], user['birth'], pass_no.upper(), x.valid_date(pass_exp), user['ident_no'], filename)
+            os.makedirs(os.path.join('static', 'vehicles'), exist_ok=True)
             pass_img.save(os.path.join('static', 'passports', filename))
             flash("Your passport successfully registered.")
             return redirect(url_for("profile.passports"))

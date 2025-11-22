@@ -13,10 +13,17 @@
             <i class="bi bi-eye-fill view-button" id="view_button" style="color: rgb(116, 116, 0)" onclick="window.open('/me/vehicles/view?id={{ greencard.vehicle_id }}', '_blank', 'width=800, height=800'); return false"></i>
         </div>
     </div>
+    <input type="hidden" name="request_id" value="{{ greencard.id }}">
     <div class="form-group">
         <label class="control-label col-sm-5" for="name">Name & Surname:</label>
         <div class="col-sm-2">
             <input class="form-control" id="name" name="name" autocomplete="off" placeholder="Name & Surname" type="text" pattern="^[A-Za-z ]+$" autofocus value="{{ greencard.namesurname }}" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="address">Address:</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="address" name="address" autocomplete="off" placeholder="Address" type="text" value="{{ greencard.address }}" required>
         </div>
     </div>
     <div class="form-group">
@@ -59,6 +66,17 @@
         <label class="control-label col-sm-5" for="policy_no">Policy Number:</label>
         <div class="col-sm-2">
             <input class="form-control" id="policy_no" name="policy_no" autocomplete="off" placeholder="Policy Number" type="text" pattern="^[0-9]{6}$" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="period">Period:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="period" name="period" required>
+                <option disabled>- Select Period -</option>
+                {% for period in periods %}
+                <option value="{{ period }}"{% if period == greencard.cov_period %} selected{% endif %}>{% if period == '3M' %}3 Months{% elif period == '1M' %}1 Month{% elif period == '15D' %}15 Days{% endif %}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group text-center">

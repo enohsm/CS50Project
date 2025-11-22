@@ -1,4 +1,5 @@
 from flask import Flask, session
+from flask_mail import Mail
 from datetime import datetime
 from routes.main_routes import mainbp
 from routes.request_routes import requestbp
@@ -12,6 +13,14 @@ app.secret_key = b"C_Szotu9soz_-01.,01Qsxn72hjsk_."
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.jinja_env.auto_reload = True
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'xaharsystem@gmail.com'
+app.config['MAIL_PASSWORD'] = 'xaharsystem22'
+app.config['MAIL_DEFAULT_SENDER'] = 'xaharsystem@gmail.com'
 
 # EN: I'm handling the login status in the template
 # TR: Giriş kontrolünü template'e aktarıyorum

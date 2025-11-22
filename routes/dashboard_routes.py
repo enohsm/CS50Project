@@ -102,7 +102,66 @@ def pending_greencards():
 @x.login_required('employee')
 def send_greencard():
     if request.method == 'POST':
-        pass
+        request_id = request.form.get('request_id')
+        if not request_id or not request_id.isdigit():
+            return redirect(url_for('dashboard.pending_greencards'))
+        
+        is_exist_request = DataBase.execute('SELECT * FROM gc_requests WHERE id = ? AND status = 0', request_id)
+        if not is_exist_request:
+            return x.apology('This request is not pending.', 'dashboard.pending_greencards')
+        
+        name_ = request.form.get('name')
+        if not name_:
+            return x.apology('You must enter a name.', 'dashboard.send_greencard', id = request_id)
+        
+        address_ = request.form.get('address')
+        if not address_:
+            return x.apology('You must enter an address.', 'dashobard.send_greencard', id = request_id)
+        
+        plate_ = request.form.get('plate')
+        if not plate_ or not x.valid_plate(plate_):
+            return x.apology('Invalid plate.', 'dashboard.send_greencard', id = request_id)
+        
+        vin_ = request.form.get('vin')
+        if not vin_ or not x.valid_vin(vin_):
+            return x.apology('Invalid VIN.', 'dashboard.send_greencard', id = request_id)
+
+        brand_ = request.form.get('brand')
+        if not brand_ or not x.valid_brand(brand_):
+            return x.apology('Invalid brand.', 'dashboard.send_greencard', id = request_id)
+        
+        type__ = request.form.get('type')
+        if not type_ or not x.valid_type(type__):
+            return x.apology('Invalid type.', 'dashboard.send_greencard', id = request_id)
+        
+        color_ = request.form.get('color')
+        if not color or not x.valid_color(color_):
+            return x.apology('Invalid color.', 'dashboard.send_greencard', id = request_id)
+        
+        start_date_ = request.form.get('start_date')
+        if not start_date_ or not x.valid_startdate(start_date_):
+            return x.apology('Invalid start date.', 'dashboard.send_greencard', id = request_id)
+        
+        policy_no_ = request.form.get('policy_no')
+        if not policy_no_:
+            return x.apology('You must enter policy number.', 'dashboard.send_greencard', id = request_id)
+        
+        period_ = request.form.get('period')
+        if not period_ or period_ not in ['3M', '1M', '15D']:
+            return x.apology('Invalid period.', 'dashboard.send_greencard', id = request_id)
+        
+        request = dict(
+            name = name_,
+            address = address_,
+            plate = plate_,
+            vin = vin_,
+            brand = brand_,
+            model = type__,
+            color = color_,
+            start_date = start_date_,
+            policy_no = policy_no_,
+            period = period_
+        )
 
     else:
         # Request_id args'dan al
@@ -115,7 +174,7 @@ def send_greencard():
         if not gc_requ or len(gc_requ) != 1:
             return x.apology('The request could not found or already sent.', 'dashboard.pending_greencards')
 
-        return render_template('gc_mailorder.html', greencard = gc_requ[0])
+        return render_template('gc_mailorder.html', greencard = gc_requ[0], periods = ['3M', '1M', '15D'])
 
 
 

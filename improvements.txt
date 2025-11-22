@@ -1,7 +1,4 @@
-Parola kontrolünü JavaScript ile yap daha iyi gözüksün.
 Readme dosyasına kayıt işlemindeki race conditionu anlat.
-Çalışanların yaptığı işlemleri tut.
 Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrolünü databaseden sorguyla kontrol ettiğini anlat.
-Delete_vehicle ve delete_passport fonksiyonlarını, html'lerini kontrol et. Dene, test et.
 
 Sıradaki: 

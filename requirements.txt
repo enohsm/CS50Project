@@ -1,5 +1,6 @@
 flask
 flask_session
+Flask-Mail
 cs50
 datetime
 requests
