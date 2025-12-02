@@ -2,49 +2,49 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{{ subject }}</title>
+        <title>{{ requ.subject }}</title>
     </head>
     <body>
-        <table>
+        <table border="1" cellpadding="5">
             <tr>
                 <td>Name & Surname</td>
-                <td>{{ request.name }}</td>
+                <td>{{ requ.name }}</td>
             </tr>
             <tr>
                 <td>Address</td>
-                <td>{{ request.address }}</td>
+                <td>{{ requ.address }}</td>
             </tr>
             <tr>
                 <td>Plate</td>
-                <td>{{ request.plate }}</td>
+                <td>{{ requ.plate }}</td>
             </tr>
             <tr>
                 <td>VIN</td>
-                <td>{{ request.vin }}</td>
+                <td>{{ requ.vin }}</td>
             </tr>
             <tr>
                 <td>Brand</td>
-                <td>{{ request.brand }}</td>
+                <td>{{ requ.brand }}</td>
             </tr>
             <tr>
                 <td>Type</td>
-                <td>{{ request.model }}</td>
+                <td>{{ requ.model }}</td>
             </tr>
             <tr>
                 <td>Color</td>
-                <td>{{ request.color }}</td>
+                <td>{{ requ.color }}</td>
             </tr>
             <tr>
                 <td>Start Date</td>
-                <td>{{ request.start_date }}</td>
+                <td>{{ requ.start_date }}</td>
             </tr>
             <tr>
                 <td>Policy Number</td>
-                <td>{{ request.policy_no }}</td>
+                <td>{{ requ.policy_no }}</td>
             </tr>
             <tr>
                 <td>Coverage Period</td>
-                <td>{% if request.period == '15D' %}15 Days{% elif request.period == '1M' %}1 Month{% elif request.period == '3M' %}3 Months{% endif %}</td>
+                <td>{{ requ.period }}</td>
             </tr>
         </table>
     </body>

@@ -5,5 +5,65 @@
 {% endblock %}
 
 {% block main %}
+<h1>My Profile</h1>
+<div class="container">
+    <div>
+        <h4>User Information:</h4>
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="username">Username:</label>
+            <span class="col-sm-1" id="username"> {{ user.username }}</span>
+        </div>
+        
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="name">Name:</label>
+            <span class="col-sm-1" id="name"> {{ user.name }}</span>
+        </div>
 
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="surname">Surname:</label>
+            <span class="col-sm-1" id="surname"> {{ user.surname }}</span>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="sex">Sex:</label>
+            <span class="col-sm-1" id="sex"> {{ user.sex }}</span>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="birth">Birth:</label>
+            <span class="col-sm-1" id="birth"> {{ user.birth }}</span>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="identity">Identity Number:</label>
+            <span class="col-sm-1" id="identity"> {{ user.ident_no | secure_identity }}</span>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="email">Email:</label>
+            <span class="col-sm-1" id="email"> {{ user.email }}</span>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-6" style="text-align:right" for="contact">Contact Number:</label>
+            <span class="col-sm-1" id="contact"> {{ user.contact | secure_contact }}</span>
+        </div>
+    </div>
+
+    <hr style="margin-top:60px; border-top:1px solid grey">
+
+    <div class="panel text-center" style="margin-top:30px">
+        <h4>User Operations:</h4>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+                <a class="events-disabled" href="{{ url_for('profile.change_password') }}">
+                    <div class="panel panel-default" style="padding:30px">
+                        <h1 style="font-size:60px"><i class="bi bi-gear-fill"></i></h2>
+                        <h4 class="text-muted">Change Password</h4>
+                    </div>
+                </a>
+            </div> 
+        </div>
+    </div>
+</div>
 {% endblock %}

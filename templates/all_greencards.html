@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    All Greencard Requests
+{% endblock %}
+
+{% block main %}
+<table class="table">
+    <h1>All Greencard Requests</h1>
+    <tr>
+        <th>Name & Surname</th>
+        <th>Address</th>
+        <th>Plate</th>
+        <th>VIN</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Start Date</th>
+        <th>Period</th>
+        <th>Status</th>
+        <th>Request Date</th>
+    </tr>
+    {% if requests %}
+    {% for request in requests %}
+    <tr>
+        <td>{{ request.namesurname }}</td>
+        <td>{{ request.address }}</td>
+        <td>{{ request.plate }}</td>
+        <td>{{ request.vin }}</td>
+        <td>{{ request.brand }}</td>
+        <td>{{ request.model }}</td>
+        <td>{{ request.color }}</td>
+        <td>{{ request.startdate }}</td>
+        <td>{% if request.cov_period == '3M' %}
+            3 Months
+            {% elif request.cov_period == '1M' %}
+            1 Month
+            {% elif request.cov_period == '15D' %}
+            15 Days
+            {% endif %}</td>
+        <td style="color:{% if request.stat == 0 %}orange{% elif request.stat == 1 %}blue{% elif request.stat == 2 %}green{% endif %}"><b>
+            {% if request.stat == 0 %}
+            Pending confirmation for insurance...
+            {% elif request.stat == 1 %}
+            Green card insurance is being prepared...
+            {% elif request.stat == 2 %}
+            Green card insurance has been prepared.
+            {% endif %}
+        </b></td>
+        <td>{{ request.request_date | format_date }}</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

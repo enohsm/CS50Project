@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    New Post
+{% endblock %}
+
+{% block main %}
+<h1>New Post</h1>
+<form class="form-horizontal" action="{{ url_for('admin.new_post') }}" method="post">
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="title">Title:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="title" name="title" type="text" autofocus autocomplete="off" placeholder="Title" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="content">Content:</label>
+        <div class="col-sm-3">
+            <textarea class="form-control" id="content" name="content" autocomplete="off" placeholder="Content" required style="resize:none;height:150px"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="type">Post Type:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="type" name="type" required>
+                <option selected disabled>-- Type --</option>
+                <option value="news">News</option>
+                <option value="announcement">Announcement</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Create Post</button>
+    </div>
+</form>
+{% endblock %}

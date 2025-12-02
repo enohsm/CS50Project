@@ -5,5 +5,21 @@
 {% endblock %}
 
 {% block main %}
+<div class="context">
+    <h1>Visa Application Process & Consultant-Assisted Workflow</h1>
+    <p>When it comes to visas, the first thing that comes to mind is the appointment. Because the appointment process itself can be quite challenging. First, the appointment must be created, then the documents must be prepared, the application must be completed, the application must be tracked, and finally the result is received. As a result, people look for consultancy services to make these steps easier. Companies that provide consultancy services need certain personal information in order to offer this service properly. However, during the collection and entry of this personal data into the system, human errors can occur.</p>
+    <p>With this system, even if the entire process is not covered, the aim is to ensure that at least passport information is transferred accurately through stricter validation, to simplify appointment procedures for both the user and the service provider, and to facilitate communication between the two parties for better process tracking.</p>
+    <p>The process works as follows:</p>
+    <ul>
+        <li>The client enters their passport information into the system.</li>
+        <li>The consultant verifies the accuracy of the information and approves it.</li>
+        <li>The client creates a visa request using their passport.</li>
+        <li>The consultant schedules a visa appointment on suitable dates.</li>
+        <li>Required documents and procedures are completed, and the application is submitted on the appointment date.</li>
+        <li>The visa application result is then awaited, and the consultant follows up on the process.</li>
+        <li>The application is finalized.</li>
+    </ul>
 
+    <p>Click <a href="{{ url_for('request.new_visa_request') }}" style="color:blue"><b>here</b></a> to create an appointment request now. <b style="color:red">(Login required.)</b></p>
+</div>
 {% endblock %}

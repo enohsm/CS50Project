@@ -9,6 +9,7 @@
 <table class="table">
     <tr>
         <th>Username</th>
+        <th>Name & Surname</th>
         <th>Plate</th>
         <th>Start Date</th>
         <th>Period</th>
@@ -21,6 +22,7 @@
     {% for greencard in greencards %}
     <tr>
         <td>{{ greencard.username }}</td>
+        <td>{{ greencard.namesurname }}</td>
         <td>{{ greencard.plate }}</td>
         <td>{{ greencard.startdate }}</td>
         <td>

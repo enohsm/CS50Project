@@ -165,6 +165,7 @@ main {
 
 
 .fake-a {
+    margin:0;
     width: 100%;
     display: block;
     padding: 3px 20px;
@@ -181,4 +182,11 @@ main {
     color: #262626;
     background-color: #f5f5f5;
     text-decoration: none;
+    cursor:pointer;
+}
+
+
+.context {
+    width: 85%;
+    margin: auto;
 }

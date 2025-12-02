@@ -1,3 +1,6 @@
+// ENG: Script for setting province and district options (written with AI assistance)
+// TR: İl ve ilçe seçeneklerini ayarlama scripti (yapay zekadan destek alınarak yazıldı)
+
 document.addEventListener("DOMContentLoaded", () => {
     const PROVINCES_URL = "https://api.turkiyeapi.dev/v1/provinces";
     fetch(PROVINCES_URL)

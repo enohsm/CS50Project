@@ -5,17 +5,27 @@
 {% endblock %}
 
 {% block main %}
+<h1>Admin Dashboard</h1>
 <div class="container">
+
     <div class="panel text-center" style="margin-top:30px">
         <div class="row">
-            <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-2">
                 <a class="events-disabled" href="{{ url_for('admin.set_roles') }}">
                     <div class="panel panel-default" style="padding:30px">
-                        <h1 style="font-size:60px"><i class="bi bi-person-fill-gear"></i></h2>
+                        <h2 style="font-size:60px"><i class="bi bi-person-fill-gear"></i></h2>
                         <h4 class="text-muted">User Roles</h4>
                     </div>
                 </a>
-            </div> 
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <a class="events-disabled" href="{{ url_for('admin.posts_route') }}">
+                    <div class="panel panel-default" style="padding:30px">
+                        <h2 style="font-size:60px"><i class="bi bi-newspaper"></i></h2>
+                        <h4 class="text-muted">Posts</h4>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

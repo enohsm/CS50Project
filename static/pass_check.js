@@ -1,3 +1,6 @@
+// ENG: Password validation triggered by input
+// TR: Input ile tetiklenen şifre kontrolü
+
 let pass_input = document.getElementById('password');
 let confirm_input = document.getElementById('confirmation');
 

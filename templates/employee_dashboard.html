@@ -8,7 +8,8 @@
 <div class="container">
     <div class="panel text-center" style="margin-top:30px">
         <div class="row">
-            <div class="col-xs-12 col-sm-4">
+            <h1>All Requests</h1>
+            <div class="col-xs-12 col-sm-4 col-sm-offset-2">
                 <a class="events-disabled" href="{{ url_for('dashboard.all_visas') }}">
                     <div class="panel panel-default" style="padding:30px">
                         <h2 style="font-size:60px">{{ visas_all.count }}</h2>
@@ -16,8 +17,18 @@
                     </div>
                 </a>
             </div>
-
             <div class="col-xs-12 col-sm-4">
+                <a class="events-disabled" href="{{ url_for('dashboard.all_greencards') }}">
+                    <div class="panel panel-default" style="padding:30px">
+                        <h2 style="font-size:60px">{{ greencards_all.count }}</h2>
+                        <h4 class="text-muted">All Green Card Requests</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <h1>Visa Operations</h1>
+            <div class="col-xs-12 col-sm-4 col-sm-offset-2">
                 <a class="events-disabled" href="{{ url_for('dashboard.passport_confirmation') }}">
                     <div class="panel panel-default" style="padding:30px">
                         <h2 style="font-size:60px">{{ passports.count }}</h2>
@@ -25,7 +36,6 @@
                     </div>
                 </a>
             </div>
-            
             <div class="col-xs-12 col-sm-4">
                 <a class="events-disabled" href="{{ url_for('dashboard.pending_visas') }}">
                     <div class="panel panel-default" style="padding:30px">
@@ -35,9 +45,8 @@
                 </a>
             </div>
         </div>
-
         <div class="row">
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-2">
                 <a class="events-disabled" href="{{ url_for('dashboard.approved_visas') }}">
                     <div class="panel panel-default" style="padding:30px">
                         <h2 style="font-size:60px">{{ confirmed_visa.count }}</h2>
@@ -45,17 +54,18 @@
                     </div>
                 </a>
             </div>
-        
             <div class="col-xs-12 col-sm-4">
                 <a class="events-disabled" href="{{ url_for('dashboard.visa_tracking') }}">
                     <div class="panel panel-default" style="padding:30px">
                         <h2 style="font-size:60px">{{ applicated_visa.count }}</h2>
-                        <h4 class="text-muted">Tracking of Visa Applications</h4>
+                        <h4 class="text-muted">Visa Application Tracking</h4>
                     </div>
                 </a>
             </div>
-
-            <div class="col-xs-12 col-sm-4">
+        </div>
+        <div class="row">
+            <h1>Green Card Operations</h1>
+            <div class="col-xs-12 col-sm-4 col-sm-offset-4">
                 <a class="events-disabled" href="{{ url_for('dashboard.pending_greencards') }}">
                     <div class="panel panel-default" style="padding:30px">
                         <h2 style="font-size:60px">{{ waiting_gc.count }}</h2>

@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block javascript2 %}
+<script src="{{ url_for('static', filename='post_page.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block main %}
+<h1>Posts</h1>
+<table class="table">
+    <div class="text-center" style="margin-bottom: 10px">
+        <a class="btn btn-success" href="{{ url_for('admin.new_post') }}">New Post</a>
+    </div>
+    <tr>
+        <th>Type</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Created At</th>
+        <th>Action</th>
+    </tr>
+    {% if posts %}
+    {% for post in posts %}
+    <tr>
+        <td>{{ post.type }}</td>
+        <td>{{ post.title }}</td>
+        <td style="max-width:200px; word-break:break-word;">{{ post.content }}</td>
+        <td>{{ post.create_datetime | format_date }}</td>
+        <td>
+            <div class="dropdown">
+                <button class="btn" type="button" data-toggle="dropdown">
+                    <i class="bi bi-list"></i><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li class="fake-a" onclick="modify_post({{ post.id }})"><b><i class="bi bi-gear" style="color:blue;margin-right:10px"></i></b>Modify</li>
+                    <li class="fake-a" onclick="delete_post({{ post.id }})"></b><i class="bi bi-x" style="color:red;margin-right:10px"></i></b>Delete</li>
+                </ul>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>
+            <div class="dropdown">
+                <button class="btn" type="button">
+                    <i class="bi bi-list"></i><span class="caret"></span>
+                </button>
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

@@ -1,4 +1,0 @@
-Readme dosyasına kayıt işlemindeki race conditionu anlat.
-Readme dosyasında neden her login_required dekoratörlü route'da yetki kontrolünü databaseden sorguyla kontrol ettiğini anlat.
-
-Sıradaki: 

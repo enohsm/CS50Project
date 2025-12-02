@@ -5,5 +5,17 @@
 {% endblock %}
 
 {% block main %}
-
+<div class="context">
+    <h1>Green Card Insurance</h1>
+    <p>Green Card insurance is an important matter for travelers planning to go abroad with their vehicles — and not just frequent travelers, but anyone who intends to take their car outside the country. Green Card insurance provides international coverage for your vehicle, making it a crucial service for trips abroad.</p>
+    <p>With the Green Card insurance request system, this process can be handled quite easily. So how does the system work?</p>
+    <ul>
+        <li>First, the customer registers a vehicle in the system.</li>
+        <li>Then, they create a Green Card insurance request.</li>
+        <li>The service provider begins preparing the insurance.</li>
+        <li>Once the insurance is ready, the service provider updates the “Request Status” accordingly.</li>
+        <li>When the insurance is completed, the customer receives their Green Card insurance.</li>
+    </ul>
+    <p>Click <a href="{{ url_for('request.new_gc_request') }}" style="color:blue"><b>here</b></a> to create a Green Card insurance request right now. <b style="color:red">(Login required)</b></p>
+</div>
 {% endblock %}

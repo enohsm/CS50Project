@@ -62,9 +62,7 @@
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">
 
-                    <!-- Sol kısım: Marka ve hamburger butonu -->
                     <div class="navbar-header">
-                    <!-- Bu buton, ekran daraldığında menüyü açıp kapatır -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNavbar">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -74,7 +72,6 @@
                     <a class="navbar-brand" href="/">Xahar</a>
                     </div>
 
-                    <!-- Menü kısmı: collapse class'ı mobilde gizlenmesini sağlar -->
                     <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="nav navbar-nav">
                         <li><a href="/">Homepage</a></li>
@@ -90,6 +87,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/me">Profile</a></li>
+                            <li><a href="{{ url_for('profile.change_password') }}">Change Password</a></li>
                             {% if user__role > 0 %}
                             <li><a href="{{ url_for('dashboard.employee_db') }}">Employee Dashboard</a></li>
                             {% endif %}

@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block javascript2 %}
+<script src="{{ url_for('static', filename='set_textarea.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Modify Post
+{% endblock %}
+
+{% block main %}
+<h1>Modify Post</h1>
+<form class="form-horizontal" action="{{ url_for('admin.modify_post') }}" method="post">
+    <input type="hidden" name="id" value="{{ p_data.id }}" required>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="title">Title:</label>
+        <div class="col-sm-3">
+            <input class="form-control" id="title" name="title" type="text" autofocus autocomplete="off" placeholder="Title" value="{{ p_data.title }}" required>
+        </div>
+    </div>
+    <input type="hidden" id="text_data" value="{{ p_data.content }}">
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="content">Content:</label>
+        <div class="col-sm-3">
+            <textarea class="form-control" id="content" name="content" autocomplete="off" placeholder="Content" required style="height:150px;resize:none;"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-5" for="type">Post Type:</label>
+        <div class="col-sm-2">
+            <select class="form-control" id="type" name="type" required>
+                <option disabled>-- Type --</option>
+                {% for type in types %}
+                <option value="{{ type }}" {% if type == p_data.type %}selected{% endif %}>{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-info btn-lg" type="submit">Modify Post</button>
+    </div>
+</form>
+{% endblock %}

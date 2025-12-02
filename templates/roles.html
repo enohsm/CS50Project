@@ -9,7 +9,13 @@
 {% endblock %}
 
 {% block main %}
-<input autocomplete="off" autofocus placeholder="Enter a username." type="text">
+<h1>User Roles</h1>
+<div class="row">
+    <label class="col-sm-5 col-form-label text-right" for="input">Search User:</label>
+    <div class="col-sm-2">
+        <input class="form-control" id="input" autocomplete="off" autofocus placeholder="Enter a username." type="text" style="margin-bottom:25px;">
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>

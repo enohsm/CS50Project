@@ -5,5 +5,55 @@
 {% endblock %}
 
 {% block main %}
-<h1>Homepage</h1>
+<div class="container">
+    <h1>Welcome to Xahar System.</h1>
+    <h4>Please log in to view the action menu and perform actions. If you are already logged in, you can access the actions from the menu on the left.</h4>
+    <label class="text-muted" for="news">News</label>
+    <table id="news" class="table table-bordered" style="margin-bottom:55px;">
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Created at</th>
+        </tr>
+        {% if news %}
+        {% for new in news %}
+        <tr>
+            <td>{{ new.title }}</td>
+            <td>{{ new.content }}</td>
+            <td>{{ new.create_datetime | format_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+        </tr>
+        {% endif %}
+    </table>
+
+    <label class="text-muted" for="announcements">Announcements</label>
+    <table id="announcements" class="table table-bordered">
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Created at</th>
+        </tr>
+        {% if announcements %}
+        {% for anno in announcements %}
+        <tr>
+            <td>{{ anno.title }}</td>
+            <td>{{ anno.content }}</td>
+            <td>{{ anno.create_datetime | format_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+            <td>NO DATA</td>
+        </tr>
+        {% endif %}
+    </table>
+</div>
 {% endblock %}
