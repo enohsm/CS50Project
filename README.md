@@ -105,7 +105,8 @@ A web-based management system for visa appointment requests, green card insuranc
 6. A .gitignore file was used during development for the protection of sensitive data.
 7. Helper functions were created in "xaharfuncs.py".
 8. Since the project was designed for educational purposes, the SECRET_KEY was generated randomly. Users are responsible for any risks if used in production environments.
-9. Phone number, identity number, passport number, and date formats are configured according to Türkiye’s standards:
+9. The icon and logo design in the project are my own work.
+10. Phone number, identity number, passport number, and date formats are configured according to Türkiye’s standards:
     Examples:
         - Phone Number: 05555555555 (11 digits)
         - Identity Number: 00000000000 (11 digits)
@@ -199,7 +200,8 @@ This project was created for educational purposes and does not include a product
 6. Hassas verilerin korunması adına proje üzerinde çalışılırken ".gitignore" kullanılmıştır.
 7. Yardımcı fonksiyonlar "xaharfuncs.py" içerisinde oluşturulmuştur.
 8. Proje eğitim amaçlı tasarlandığı için SECRET_KEY random bir şekilde oluşturulmuştur, üretim amaçlu kullanımlarda oluşacak risklerden kullanıcı sorumludur.
-9. Telefon numarası, kimlik numarası, pasaport numarası, tarih veriler için formatlar Türkiye'ye göre ayarlanmıştır:
+9. Projedeki icon ve logo tasarımı tarafıma aittir.
+10. Telefon numarası, kimlik numarası, pasaport numarası, tarih veriler için formatlar Türkiye'ye göre ayarlanmıştır:
     Örnekler:
         - Telefon Numarası: 05555555555 (11 hane)
         - Kimlik Numarası: 00000000000 (11 hane)
