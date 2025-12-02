@@ -2,7 +2,7 @@
 
 A web-based management system for visa appointment requests, green card insurance processes, and user passport/vehicle data. Includes admin and employee interfaces with role-based access control.
 
-## Table of Contents / İçerik Tablosu
+## Table of Contents
 - [ENGLISH](#english)
 - [Instructions](#instructions)
 - [Setup](#setup)
@@ -10,6 +10,9 @@ A web-based management system for visa appointment requests, green card insuranc
 - [Notes](#notes)
 - [License](#license)
 
+---
+
+## İçerik Tablosu
 - [TÜRKÇE](#türkçe)
 - [Yönergeler](#yönergeler)
 - [Kurulum](#kurulum)
@@ -120,13 +123,24 @@ This project was created for educational purposes and does not include a product
 
 #### Kurulum
 
-1. Öncelikle projenin bilgisayarınızda doğru bir şekilde çalışması için çalışma dizininde terminalinizi açıp "pip install -r requirements.txt" yazın. (Terminalinizin dosya konumunda olması gerekmektedir.)
+1. Öncelikle projenin bilgisayarınızda doğru bir şekilde çalışması için çalışma dizininde terminalinizi açıp şunu yazınız:
+    ```bash
+    pip install -r requirements.txt
+
+    Your terminal must be located in the same directory as the files.
+    ```
 2. Mail gönderme sisteminin çalışabilmesi için "app.py" içerisindeki mail ayarlarını ve "/routes/dashboard_routes.py" içerisindeki mail ayarlarını yapmalısınız. (CTRL+F ile "setmailsetting" olarak aratabilirsiniz. Test için mailtrap kullanılmıştır.)
 
 #### Kullanım
 
-1. Uygulamayı çalıştırmak için terminalinizi proje dizinine getirip "python app.py" yazmanız yeterli olacaktır.
-2. İnternet tarayıcınızı açıp "127.0.0.1:8080" adresine gidiniz.
+1. Uygulamayı çalıştırmak için terminalinizi proje dizinine getirip şu kodu yazmanız yeterli olacaktır:
+    ```bash
+    python app.py
+    ```
+2. İnternet tarayıcınızı açıp şu adrese gidiniz:
+    ```bash
+    127.0.0.1:8080
+    ```
 3. Açılan sayfada sağ üst kısımdaki üye ol alanından üyelik oluşturunuz.
 4. Ardından giriş yapınız.
 5. Sol taraftaki hızlı erişim menüsünü kullanarak "Pasaportlarım", "Araçlarım", "Taleplerim" kısımlarına ulaşabilirsiniz.
@@ -152,14 +166,12 @@ This project was created for educational purposes and does not include a product
         - Açılan sayfada tüm yeşil sigorta talepleriniz görüntülenecektir.
         - Buradan yeşil sigorta taleplerinizin durumunu kontrol edebilir, henüz işleme girmemiş olan vize taleplerinizi düzenleyebilir ya da iptal edebilirsiniz.
 9. Çalışan ve yönetici arayüzünü deneyimleyebilmek için aşağıdaki bilgiler ile giriş yapınız:
-    Yönetici bilgileri:
-        - Kullanıcı Adı: admin
-        - Şifre: admin
-        - ID No: 00000000000 (Pasaport ekleme işlemleri için)
-    Çalışan bilgileri:
-        - Kullanıcı Adı: employee
-        - Şifre: employee
-        - ID No: 11111111111
+
+| Role     | Username | Password | ID No       |
+| -------- | -------- | -------- | ----------- |
+| Admin    | admin    | admin    | 00000000000 |
+| Employee | employee | employee | 11111111111 |
+
 10. Giriş yaptığınız yetkiye göre sol taraftaki menüye "Çalışan Arayüzü" ve "Yönetici Arayüzü" kısımları eklenecektir. (Yönetici olarak giriş yaparak her ikisini aynı anda deneyimleyebilirsiniz.)
 11. Yönetici arayüzüne girdiğinizde "Kullanıcı Rolleri" butonunu göreceksiniz. Butona tıkladığınızda karşınıza gelen sayfada kullanıcı adı ile kullanıcı arayarak yetkilerini ayarlayabilirsiniz. ("all" yazarak tüm kullanıcıları görüntüleyebilirsiniz.)
 12. Çalışan arayüzü "Tüm Talepler", "Vize İşlemleri" ve "Yeşil Sigorta İşlemleri" olarak üçe ayrılmıştır:
